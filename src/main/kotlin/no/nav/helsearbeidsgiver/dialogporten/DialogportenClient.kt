@@ -17,8 +17,7 @@ class DialogportenClient(
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-
-    private suspend fun opprettDialog(
+    suspend fun opprettDialog(
         orgnr: String,
     ): Result<String> {
         val dialogRequest = lagCreateDialogRequest(
@@ -28,7 +27,7 @@ class DialogportenClient(
             tittel = "",
             sammendrag = "",
         )
-        val pdpResponseResult: Result<String> =
+        val dialogResponse: Result<String> =
             runCatching<DialogportenClient, String> {
                 httpClient
                     .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
@@ -43,7 +42,7 @@ class DialogportenClient(
                 }
                 throw DialogportenClientException()
             }
-        return pdpResponseResult
+        return dialogResponse
     }
 }
 
