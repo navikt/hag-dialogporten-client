@@ -10,12 +10,12 @@ class DialogportenClientTest :
     FunSpec({
         test("Opprett dialog gir id tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
-            dialogportenClient.opprettDialog(MockData.orgnr).getOrNull() shouldBe MockData.gyldingRespons
+            dialogportenClient.opprettDialog(MockData.orgnr, "testurl").getOrNull() shouldBe MockData.gyldingRespons
         }
 
         test("Opprett dialog gir valideringsfeil") {
             val dialogportenClient =
                 mockDialogportenClient(HttpStatusCode.BadRequest, "create-dialog-response/validation-error.json".readResource())
-            shouldThrowExactly<DialogportenClientException> { dialogportenClient.opprettDialog(MockData.orgnr).getOrThrow() }
+            shouldThrowExactly<DialogportenClientException> { dialogportenClient.opprettDialog(MockData.orgnr, "testurl").getOrThrow() }
         }
     })
