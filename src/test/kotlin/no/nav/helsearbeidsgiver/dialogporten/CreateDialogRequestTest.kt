@@ -11,5 +11,4 @@ class CreateDialogRequestTest :
             requestString shouldContain "nav_sykepenger_inntektsmelding-nedlasting"
             requestString shouldContain "urn:altinn:organization:identifier-no:${MockData.orgnr}"
         }
-
     })

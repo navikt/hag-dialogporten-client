@@ -17,16 +17,17 @@ class DialogportenClient(
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-    suspend fun opprettDialog(
-        orgnr: String,
-    ): Result<String> {
-        val dialogRequest = lagCreateDialogRequest(
-            ressurs = ressurs,
-            orgnr = orgnr,
-            status = "New",
-            tittel = "",
-            sammendrag = "",
-        )
+    suspend fun opprettDialog(orgnr: String): Result<String> {
+        val dialogRequest =
+            lagCreateDialogRequest(
+                ressurs = ressurs,
+                orgnr = orgnr,
+                status = "New",
+                tittel = "",
+                sammendrag = "",
+                url = "",
+                knappTittel = "Gå til inntektsmeldingskjema på nav.no",
+            )
         val dialogResponse: Result<String> =
             runCatching<DialogportenClient, String> {
                 httpClient

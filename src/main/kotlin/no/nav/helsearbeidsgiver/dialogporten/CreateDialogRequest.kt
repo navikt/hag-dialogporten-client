@@ -15,45 +15,53 @@ data class CreateDialogRequest(
     @Serializable
     data class Content(
         val title: ContentValue,
-        val summary: ContentValue
+        val summary: ContentValue,
     )
 
     @Serializable
     data class ContentValue(
         val value: List<ContentValueItem>,
-        val mediaType: String = "text/plain"
+        val mediaType: String = "text/plain",
     )
 
     @Serializable
     data class ContentValueItem(
         val value: String,
-        val languageCode: String = "nb"
+        val languageCode: String = "nb",
     )
+
     @Serializable
     data class GuiAction(
         val action: String,
-        val url : String,
+        val url: String,
         val isDeleteDialogAction: Boolean = false,
-        val priority : String = "Primary",
-        val title : List<ContentValueItem>
+        val priority: String = "Primary",
+        val title: List<ContentValueItem>,
     )
 }
 
 fun lagContentValue(verdi: String) =
     CreateDialogRequest.ContentValue(
-        value = listOf(
-            CreateDialogRequest.ContentValueItem(
-                value = verdi
-            )
-        )
+        value =
+            listOf(
+                CreateDialogRequest.ContentValueItem(
+                    value = verdi,
+                ),
+            ),
     )
 
-fun lagGuiAction(url: String, tittel: String)= CreateDialogRequest.GuiAction(
+fun lagGuiAction(
+    url: String,
+    tittel: String,
+) = CreateDialogRequest.GuiAction(
     action = "read",
-    url = "",
-    title = listOf(CreateDialogRequest.ContentValueItem(
-        value = tittel
-    ))
+    url = url,
+    title =
+        listOf(
+            CreateDialogRequest.ContentValueItem(
+                value = tittel,
+            ),
+        ),
 )
 
 fun lagCreateDialogRequest(
@@ -63,7 +71,7 @@ fun lagCreateDialogRequest(
     tittel: String,
     sammendrag: String,
     url: String,
-    knappTittel: String
+    knappTittel: String,
 ): CreateDialogRequest =
     CreateDialogRequest(
         serviceResource = "urn:altinn:resource:$ressurs",
@@ -71,6 +79,5 @@ fun lagCreateDialogRequest(
         status = status,
         externalRefererence = UUID.randomUUID().toString(),
         content = CreateDialogRequest.Content(lagContentValue(tittel), lagContentValue(sammendrag)),
-        guiActions = listOf(lagGuiAction(url, knappTittel))
-
+        guiActions = listOf(lagGuiAction(url, knappTittel)),
     )
