@@ -17,16 +17,19 @@ class DialogportenClient(
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-    suspend fun opprettDialog(orgnr: String): Result<String> {
+    suspend fun opprettDialog(
+        orgnr: String,
+        url: String,
+    ): Result<String> {
         val dialogRequest =
             lagCreateDialogRequest(
                 ressurs = ressurs,
                 orgnr = orgnr,
                 status = "New",
-                tittel = "",
-                sammendrag = "",
-                url = "",
-                knappTittel = "Gå til inntektsmeldingskjema på nav.no",
+                tittel = "Nav trenger inntektsmelding",
+                sammendrag = "En av dine ansatte har søkt om sykepenger for perioden DD.MM.ÅÅÅÅ - DD.MM.ÅÅÅÅ og vi trenger inntektsmelding for å behandle søknaden. Logg inn på Min side – arbeidsgiver hos Nav.",
+                url = url,
+                knappTittel = "Gå til inntektsmeldingskjema på Nav",
             )
         val dialogResponse: Result<String> =
             runCatching<DialogportenClient, String> {
