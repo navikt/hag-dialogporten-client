@@ -27,7 +27,8 @@ class DialogportenClient(
                 orgnr = orgnr,
                 status = "New",
                 tittel = "Nav trenger inntektsmelding",
-                sammendrag = "En av dine ansatte har søkt om sykepenger for perioden DD.MM.ÅÅÅÅ - DD.MM.ÅÅÅÅ og vi trenger inntektsmelding for å behandle søknaden. Logg inn på Min side – arbeidsgiver hos Nav.",
+                sammendrag =
+                    "En av dine ansatte har søkt om sykepenger for perioden DD.MM.ÅÅÅÅ - DD.MM.ÅÅÅÅ og vi trenger inntektsmelding for å behandle søknaden. Logg inn på Min side – arbeidsgiver hos Nav.",
                 url = url,
                 knappTittel = "Gå til inntektsmeldingskjema på Nav",
             )
