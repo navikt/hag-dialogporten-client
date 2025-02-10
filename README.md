@@ -28,3 +28,7 @@ Spørsmål knyttet til koden kan rettes mot <helsearbeidsgiver@nav.no>.
 ### For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #helse-arbeidsgiver.
+
+## Kode generert av GitHub Copilot
+
+Dette repoet bruker GitHub Copilot til å generere kode.

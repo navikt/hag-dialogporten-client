@@ -42,7 +42,7 @@ class DialogportenClient(
                     }.body()
             }.recover { e ->
                 "Feil ved kall til dialogporten endepunkt".also {
-                    logger.error(it)
+                    logger.error(it, e)
                     sikkerLogger.error(it, e)
                 }
                 throw DialogportenClientException()

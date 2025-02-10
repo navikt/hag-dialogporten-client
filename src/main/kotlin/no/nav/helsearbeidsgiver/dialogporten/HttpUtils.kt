@@ -12,6 +12,7 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import no.nav.helsearbeidsgiver.utils.json.jsonConfig
 
 internal fun createHttpClient(
@@ -25,7 +26,7 @@ internal fun HttpClientConfig<*>.configure(
 ) {
     expectSuccess = true
     install(ContentNegotiation) {
-        json(jsonConfig)
+        json(jsonConfigEncodeDefaults)
     }
     var token: BearerTokens
     install(Auth) {
@@ -49,6 +50,12 @@ internal fun HttpClientConfig<*>.configure(
         exponentialDelay()
     }
 }
+
+val jsonConfigEncodeDefaults =
+    Json {
+        jsonConfig.configuration
+        encodeDefaults = true
+    }
 
 private fun Throwable.isRetryableException() =
     when (this) {
