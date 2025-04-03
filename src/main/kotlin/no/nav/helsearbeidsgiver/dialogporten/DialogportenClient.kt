@@ -49,6 +49,40 @@ class DialogportenClient(
             }
         return dialogResponse
     }
+
+    suspend fun opprettNyDialogMedSykmelding(
+        orgnr: String,
+        dialogTittel: String,
+        dialogSammendrag: String,
+        sykmeldingId: String,
+        sykmeldingJsonUrl: String,
+    ): Result<String> {
+        val dialogRequest =
+            lagNyDialogRequestMedSykmelding(
+                ressurs = ressurs,
+                orgnr = orgnr,
+                dialogTittel = dialogTittel,
+                dialogSammendrag = dialogSammendrag,
+                sykmeldingId = sykmeldingId,
+                sykmeldingJsonUrl = sykmeldingJsonUrl,
+            )
+        val dialogResponse: Result<String> =
+            runCatching<DialogportenClient, String> {
+                httpClient
+                    .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
+                        header("Content-Type", "application/json")
+                        header("Accept", "application/json")
+                        setBody(dialogRequest)
+                    }.body()
+            }.recover { e ->
+                "Feil ved kall til Dialogporten".also {
+                    logger.error(it, e)
+                    sikkerLogger.error(it, e)
+                }
+                throw DialogportenClientException()
+            }
+        return dialogResponse
+    }
 }
 
 class DialogportenClientException :
