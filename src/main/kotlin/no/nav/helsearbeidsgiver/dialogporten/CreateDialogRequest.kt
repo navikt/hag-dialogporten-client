@@ -138,14 +138,14 @@ fun lagNyDialogRequestMedSykmelding(
     orgnr: String,
     dialogTittel: String,
     dialogSammendrag: String,
-    sykmeldingId: String,
+    sykmeldingId: UUID,
     sykmeldingJsonUrl: String,
 ): CreateDialogRequest =
     CreateDialogRequest(
         serviceResource = "urn:altinn:resource:$ressurs",
         party = "urn:altinn:organization:identifier-no:$orgnr",
         status = "New",
-        externalRefererence = sykmeldingId,
+        externalRefererence = sykmeldingId.toString(),
         content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
         guiActions = emptyList(),
         transmissions = listOf(

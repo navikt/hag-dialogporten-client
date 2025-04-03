@@ -26,7 +26,7 @@ class DialogportenClientTest :
                 orgnr = MockData.orgnr,
                 dialogTittel = "testTittel",
                 dialogSammendrag = "testSammendrag",
-                sykmeldingId = UUID.randomUUID().toString(),
+                sykmeldingId = UUID.randomUUID(),
                 sykmeldingJsonUrl = "testurl.no"
             ).getOrNull() shouldBe MockData.gyldingRespons
         }

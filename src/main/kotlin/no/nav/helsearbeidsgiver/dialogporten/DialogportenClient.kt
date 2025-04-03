@@ -6,6 +6,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
+import java.util.UUID
 
 class DialogportenClient(
     private val baseUrl: String,
@@ -54,7 +55,7 @@ class DialogportenClient(
         orgnr: String,
         dialogTittel: String,
         dialogSammendrag: String,
-        sykmeldingId: String,
+        sykmeldingId: UUID,
         sykmeldingJsonUrl: String,
     ): Result<String> {
         val dialogRequest =
