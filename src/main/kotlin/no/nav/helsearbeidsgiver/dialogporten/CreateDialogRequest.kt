@@ -47,8 +47,7 @@ data class Transmission(
     val sender: Sender,
     val content: Content,
     val attachments: List<Attachment>,
-
-    ) {
+) {
     @Serializable
     data class Sender(
         val actorType: String,
@@ -87,7 +86,6 @@ data class Transmission(
         Gui,
         Api,
     }
-
 }
 
 fun lagContentValue(verdi: String) =
@@ -148,26 +146,30 @@ fun lagNyDialogRequestMedSykmelding(
         externalRefererence = sykmeldingId.toString(),
         content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
         guiActions = emptyList(),
-        transmissions = listOf(
-            Transmission(
-                type = Transmission.TransmissionType.Information,
-                sender = Transmission.Sender("ServiceOwner"),
-                content = Content(
-                    title = lagContentValue("Sykmelding"),
-                    summary = lagContentValue("Sykmelding")
+        transmissions =
+            listOf(
+                Transmission(
+                    type = Transmission.TransmissionType.Information,
+                    sender = Transmission.Sender("ServiceOwner"),
+                    content =
+                        Content(
+                            title = lagContentValue("Sykmelding"),
+                            summary = lagContentValue("Sykmelding"),
+                        ),
+                    attachments =
+                        listOf(
+                            Transmission.Attachment(
+                                displayName = ContentValueItem("Sykmelding.json"),
+                                urls =
+                                    listOf(
+                                        Transmission.Url(
+                                            url = sykmeldingJsonUrl,
+                                            mediaType = "application/json",
+                                            consumerType = Transmission.AttachmentUrlConsumerType.Api,
+                                        ),
+                                    ),
+                            ),
+                        ),
                 ),
-                attachments = listOf(
-                    Transmission.Attachment(
-                        displayName = ContentValueItem("Sykmelding.json"),
-                        urls = listOf(
-                            Transmission.Url(
-                                url = sykmeldingJsonUrl,
-                                mediaType = "application/json",
-                                consumerType = Transmission.AttachmentUrlConsumerType.Api
-                            )
-                        )
-                    )
-                )
-            )
-        )
+            ),
     )
