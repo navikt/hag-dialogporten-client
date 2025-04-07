@@ -71,7 +71,7 @@ data class Transmission(
 
     @Serializable
     data class Attachment(
-        val displayName: ContentValueItem,
+        val displayName: List<ContentValueItem>,
         val urls: List<Url>,
     )
 
@@ -158,7 +158,7 @@ fun lagNyDialogRequestMedSykmelding(
                 ),
                 attachments = listOf(
                     Transmission.Attachment(
-                        displayName = ContentValueItem("Sykmelding.json"),
+                        displayName = listOf(ContentValueItem("Sykmelding.json")),
                         urls = listOf(
                             Transmission.Url(
                                 url = sykmeldingJsonUrl,
