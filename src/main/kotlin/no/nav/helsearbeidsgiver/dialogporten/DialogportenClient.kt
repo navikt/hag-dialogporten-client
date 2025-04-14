@@ -59,7 +59,7 @@ class DialogportenClient(
         sykmeldingJsonUrl: String,
     ): Result<String> {
         val dialogRequest =
-            lagNyDialogRequestMedSykmelding(
+            lagNyDialogMedSykmeldingRequest(
                 ressurs = ressurs,
                 orgnr = orgnr,
                 dialogTittel = dialogTittel,

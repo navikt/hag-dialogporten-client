@@ -133,7 +133,7 @@ fun lagCreateDialogRequest(
         transmissions = emptyList(),
     )
 
-fun lagNyDialogRequestMedSykmelding(
+fun lagNyDialogMedSykmeldingRequest(
     ressurs: String,
     orgnr: String,
     dialogTittel: String,
