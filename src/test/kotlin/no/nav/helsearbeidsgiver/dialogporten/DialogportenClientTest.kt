@@ -22,12 +22,13 @@ class DialogportenClientTest :
 
         test("Opprett dialog med sykmelding gir id tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
-            dialogportenClient.opprettNyDialogMedSykmelding(
-                orgnr = MockData.orgnr,
-                dialogTittel = "testTittel",
-                dialogSammendrag = "testSammendrag",
-                sykmeldingId = UUID.randomUUID(),
-                sykmeldingJsonUrl = "testurl.no"
-            ).getOrNull() shouldBe MockData.gyldingRespons
+            dialogportenClient
+                .opprettNyDialogMedSykmelding(
+                    orgnr = MockData.orgnr,
+                    dialogTittel = "testTittel",
+                    dialogSammendrag = "testSammendrag",
+                    sykmeldingId = UUID.randomUUID(),
+                    sykmeldingJsonUrl = "testurl.no",
+                ).getOrNull() shouldBe MockData.gyldingRespons
         }
     })
