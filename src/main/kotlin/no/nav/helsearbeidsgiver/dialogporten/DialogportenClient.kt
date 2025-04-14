@@ -76,8 +76,8 @@ class DialogportenClient(
                         setBody(dialogRequest)
                     }.body()
             }.recover { e ->
-                "Feil ved kall til Dialogporten".also {
-                    logger.error(it, e)
+                "Feil med kall til Dialogporten".also {
+                    logger.error(it)
                     sikkerLogger.error(it, e)
                 }
                 throw DialogportenClientException()
