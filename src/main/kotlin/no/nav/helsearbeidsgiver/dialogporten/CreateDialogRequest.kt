@@ -12,15 +12,19 @@ data class CreateDialogRequest(
     val content: Content,
     val guiActions: List<GuiAction>,
     val transmissions: List<Transmission>,
+)
+
+@Serializable
+data class GuiAction(
+    val action: String,
+    val url: String,
+    val title: List<ContentValueItem>,
 ) {
-    @Serializable
-    data class GuiAction(
-        val action: String,
-        val url: String,
-        val isDeleteDialogAction: Boolean = false,
-        val priority: String = "Primary",
-        val title: List<ContentValueItem>,
-    )
+    @Suppress("unused")
+    val priority = "Primary"
+
+    @Suppress("unused")
+    val isDeleteDialogAction = false
 }
 
 @Serializable
@@ -32,14 +36,18 @@ data class Content(
 @Serializable
 data class ContentValue(
     val value: List<ContentValueItem>,
-    val mediaType: String = "text/plain",
-)
+) {
+    @Suppress("unused")
+    val mediaType: String = "text/plain"
+}
 
 @Serializable
 data class ContentValueItem(
     val value: String,
-    val languageCode: String = "nb",
-)
+) {
+    @Suppress("unused")
+    val languageCode: String = "nb"
+}
 
 @Serializable
 data class Transmission(
@@ -101,7 +109,7 @@ fun lagContentValue(verdi: String) =
 fun lagGuiAction(
     url: String,
     tittel: String,
-) = CreateDialogRequest.GuiAction(
+) = GuiAction(
     action = "read",
     url = url,
     title =

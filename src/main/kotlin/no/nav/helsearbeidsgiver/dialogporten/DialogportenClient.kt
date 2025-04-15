@@ -57,7 +57,7 @@ class DialogportenClient(
         dialogSammendrag: String,
         sykmeldingId: UUID,
         sykmeldingJsonUrl: String,
-    ): Result<String> {
+    ): String {
         val dialogRequest =
             lagNyDialogMedSykmeldingRequest(
                 ressurs = ressurs,
@@ -67,22 +67,20 @@ class DialogportenClient(
                 sykmeldingId = sykmeldingId,
                 sykmeldingJsonUrl = sykmeldingJsonUrl,
             )
-        val dialogResponse: Result<String> =
-            runCatching<DialogportenClient, String> {
-                httpClient
-                    .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
-                        header("Content-Type", "application/json")
-                        header("Accept", "application/json")
-                        setBody(dialogRequest)
-                    }.body()
-            }.recover { e ->
-                "Feil med kall til Dialogporten".also {
-                    logger.error(it)
-                    sikkerLogger.error(it, e)
-                }
-                throw DialogportenClientException()
+        return runCatching<DialogportenClient, String> {
+            httpClient
+                .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
+                    header("Content-Type", "application/json")
+                    header("Accept", "application/json")
+                    setBody(dialogRequest)
+                }.body()
+        }.getOrElse { e ->
+            "Feil med kall til Dialogporten".also {
+                logger.error(it)
+                sikkerLogger.error(it, e)
             }
-        return dialogResponse
+            throw DialogportenClientException()
+        }
     }
 }
 
