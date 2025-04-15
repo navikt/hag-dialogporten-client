@@ -46,7 +46,7 @@ class DialogportenClient(
                     logger.error(it, e)
                     sikkerLogger.error(it, e)
                 }
-                throw DialogportenClientException()
+                throw DialogportenClientException("Feil ved kall til dialogporten endepunkt")
             }
         return dialogResponse
     }
@@ -67,16 +67,22 @@ class DialogportenClient(
                 sykmeldingId = sykmeldingId,
                 sykmeldingJsonUrl = sykmeldingJsonUrl,
             )
-        return httpClient
-            .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
-                header("Content-Type", "application/json")
-                header("Accept", "application/json")
-                setBody(dialogRequest)
-            }.body()
+        return runCatching<DialogportenClient, String> {
+            httpClient
+                .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
+                    header("Content-Type", "application/json")
+                    header("Accept", "application/json")
+                    setBody(dialogRequest)
+                }.body()
+        }.getOrElse { e ->
+            "Feil ved kall til Dialogporten for å opprette dialog med sykemelding".also {
+                logger.error(it, e)
+                sikkerLogger.error(it, e)
+                throw DialogportenClientException(it)
+            }
+        }
     }
 }
 
-class DialogportenClientException :
-    Exception(
-        "Feil ved kall til dialogporten endepunkt",
-    )
+class DialogportenClientException(message: String) :
+    Exception(message)
