@@ -67,20 +67,12 @@ class DialogportenClient(
                 sykmeldingId = sykmeldingId,
                 sykmeldingJsonUrl = sykmeldingJsonUrl,
             )
-        return runCatching<DialogportenClient, String> {
-            httpClient
-                .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
-                    header("Content-Type", "application/json")
-                    header("Accept", "application/json")
-                    setBody(dialogRequest)
-                }.body()
-        }.getOrElse { e ->
-            "Feil med kall til Dialogporten".also {
-                logger.error(it)
-                sikkerLogger.error(it, e)
-            }
-            throw DialogportenClientException()
-        }
+        return httpClient
+            .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
+                header("Content-Type", "application/json")
+                header("Accept", "application/json")
+                setBody(dialogRequest)
+            }.body()
     }
 }
 
