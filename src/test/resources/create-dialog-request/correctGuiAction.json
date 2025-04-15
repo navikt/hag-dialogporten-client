@@ -1,12 +1,12 @@
 {
   "action": "read",
   "url": "https://arbeidsgiver.intern.dev.nav.no/im-dialog/8e1ac9cc-34d4-4342-b865-3fb5fe9b154c",
-  "isDeleteDialogAction": false,
-  "priority": "Primary",
   "title": [
     {
       "value": "Gå til inntektsmeldingskjema på nav.no",
       "languageCode": "nb"
     }
-  ]
+  ],
+  "priority": "Primary",
+  "isDeleteDialogAction": false
 }

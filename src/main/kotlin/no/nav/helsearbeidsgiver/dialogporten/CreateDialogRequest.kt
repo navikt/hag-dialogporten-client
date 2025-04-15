@@ -11,40 +11,96 @@ data class CreateDialogRequest(
     val status: String,
     val content: Content,
     val guiActions: List<GuiAction>,
+    val transmissions: List<Transmission>,
+)
+
+@Serializable
+data class GuiAction(
+    val action: String,
+    val url: String,
+    val title: List<ContentValueItem>,
+) {
+    @Suppress("unused")
+    val priority = "Primary"
+
+    @Suppress("unused")
+    val isDeleteDialogAction = false
+}
+
+@Serializable
+data class Content(
+    val title: ContentValue,
+    val summary: ContentValue,
+)
+
+@Serializable
+data class ContentValue(
+    val value: List<ContentValueItem>,
+) {
+    @Suppress("unused")
+    val mediaType: String = "text/plain"
+}
+
+@Serializable
+data class ContentValueItem(
+    val value: String,
+) {
+    @Suppress("unused")
+    val languageCode: String = "nb"
+}
+
+@Serializable
+data class Transmission(
+    val type: TransmissionType,
+    val sender: Sender,
+    val content: Content,
+    val attachments: List<Attachment>,
 ) {
     @Serializable
-    data class Content(
-        val title: ContentValue,
-        val summary: ContentValue,
+    data class Sender(
+        val actorType: String,
     )
 
     @Serializable
-    data class ContentValue(
-        val value: List<ContentValueItem>,
-        val mediaType: String = "text/plain",
+    enum class TransmissionType {
+        // For general information, not related to any submissions
+        Information,
+
+        // Feedback/receipt accepting a previous submission
+        Acceptance,
+
+        // Feedback/error message rejecting a previous submission
+        Rejection,
+
+        // Question/request for more information
+        Request,
+    }
+
+    @Serializable
+    data class Attachment(
+        val displayName: List<ContentValueItem>,
+        val urls: List<Url>,
     )
 
     @Serializable
-    data class ContentValueItem(
-        val value: String,
-        val languageCode: String = "nb",
-    )
-
-    @Serializable
-    data class GuiAction(
-        val action: String,
+    data class Url(
         val url: String,
-        val isDeleteDialogAction: Boolean = false,
-        val priority: String = "Primary",
-        val title: List<ContentValueItem>,
+        val mediaType: String,
+        val consumerType: AttachmentUrlConsumerType,
     )
+
+    @Serializable
+    enum class AttachmentUrlConsumerType {
+        Gui,
+        Api,
+    }
 }
 
 fun lagContentValue(verdi: String) =
-    CreateDialogRequest.ContentValue(
+    ContentValue(
         value =
             listOf(
-                CreateDialogRequest.ContentValueItem(
+                ContentValueItem(
                     value = verdi,
                 ),
             ),
@@ -53,12 +109,12 @@ fun lagContentValue(verdi: String) =
 fun lagGuiAction(
     url: String,
     tittel: String,
-) = CreateDialogRequest.GuiAction(
+) = GuiAction(
     action = "read",
     url = url,
     title =
         listOf(
-            CreateDialogRequest.ContentValueItem(
+            ContentValueItem(
                 value = tittel,
             ),
         ),
@@ -78,6 +134,50 @@ fun lagCreateDialogRequest(
         party = "urn:altinn:organization:identifier-no:$orgnr",
         status = status,
         externalRefererence = UUID.randomUUID().toString(),
-        content = CreateDialogRequest.Content(lagContentValue(tittel), lagContentValue(sammendrag)),
+        content = Content(lagContentValue(tittel), lagContentValue(sammendrag)),
         guiActions = listOf(lagGuiAction(url, knappTittel)),
+        transmissions = emptyList(),
+    )
+
+fun lagNyDialogMedSykmeldingRequest(
+    ressurs: String,
+    orgnr: String,
+    dialogTittel: String,
+    dialogSammendrag: String,
+    sykmeldingId: UUID,
+    sykmeldingJsonUrl: String,
+): CreateDialogRequest =
+    CreateDialogRequest(
+        serviceResource = "urn:altinn:resource:$ressurs",
+        party = "urn:altinn:organization:identifier-no:$orgnr",
+        status = "New",
+        externalRefererence = sykmeldingId.toString(),
+        content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
+        guiActions = emptyList(),
+        transmissions =
+            listOf(
+                Transmission(
+                    type = Transmission.TransmissionType.Information,
+                    sender = Transmission.Sender("ServiceOwner"),
+                    content =
+                        Content(
+                            title = lagContentValue("Sykmelding"),
+                            summary = lagContentValue("Sykmelding"),
+                        ),
+                    attachments =
+                        listOf(
+                            Transmission.Attachment(
+                                displayName = listOf(ContentValueItem("Sykmelding.json")),
+                                urls =
+                                    listOf(
+                                        Transmission.Url(
+                                            url = sykmeldingJsonUrl,
+                                            mediaType = "application/json",
+                                            consumerType = Transmission.AttachmentUrlConsumerType.Api,
+                                        ),
+                                    ),
+                            ),
+                        ),
+                ),
+            ),
     )

@@ -3,7 +3,6 @@ package no.nav.helsearbeidsgiver.dialogporten
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import no.nav.helsearbeidsgiver.utils.json.jsonConfig
@@ -45,7 +44,7 @@ class CreateDialogRequestTest :
                     "Gå til inntektsmeldingskjema på nav.no",
                 )
             guiAction.title.first().languageCode shouldBe "nb"
-            val requestString = jsonConfigEncodeDefaults.encodeToString(CreateDialogRequest.GuiAction.serializer(), guiAction)
+            val requestString = jsonConfigEncodeDefaults.encodeToString(GuiAction.serializer(), guiAction)
             val forventetString = "create-dialog-request/correctGuiAction.json".readResource().normalizeJsonString()
             requestString shouldBe forventetString
         }

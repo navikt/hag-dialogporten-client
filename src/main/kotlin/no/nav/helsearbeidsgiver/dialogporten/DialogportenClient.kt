@@ -6,6 +6,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
+import java.util.UUID
 
 class DialogportenClient(
     private val baseUrl: String,
@@ -45,13 +46,44 @@ class DialogportenClient(
                     logger.error(it, e)
                     sikkerLogger.error(it, e)
                 }
-                throw DialogportenClientException()
+                throw DialogportenClientException("Feil ved kall til dialogporten endepunkt")
             }
         return dialogResponse
     }
+
+    suspend fun opprettNyDialogMedSykmelding(
+        orgnr: String,
+        dialogTittel: String,
+        dialogSammendrag: String,
+        sykmeldingId: UUID,
+        sykmeldingJsonUrl: String,
+    ): String {
+        val dialogRequest =
+            lagNyDialogMedSykmeldingRequest(
+                ressurs = ressurs,
+                orgnr = orgnr,
+                dialogTittel = dialogTittel,
+                dialogSammendrag = dialogSammendrag,
+                sykmeldingId = sykmeldingId,
+                sykmeldingJsonUrl = sykmeldingJsonUrl,
+            )
+        return runCatching<DialogportenClient, String> {
+            httpClient
+                .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
+                    header("Content-Type", "application/json")
+                    header("Accept", "application/json")
+                    setBody(dialogRequest)
+                }.body()
+        }.getOrElse { e ->
+            "Feil ved kall til Dialogporten for å opprette dialog med sykemelding".also {
+                logger.error(it, e)
+                sikkerLogger.error(it, e)
+                throw DialogportenClientException(it)
+            }
+        }
+    }
 }
 
-class DialogportenClientException :
-    Exception(
-        "Feil ved kall til dialogporten endepunkt",
-    )
+class DialogportenClientException(
+    message: String,
+) : Exception(message)
