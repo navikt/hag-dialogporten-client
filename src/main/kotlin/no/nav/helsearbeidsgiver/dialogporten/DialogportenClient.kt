@@ -84,5 +84,6 @@ class DialogportenClient(
     }
 }
 
-class DialogportenClientException(message: String) :
-    Exception(message)
+class DialogportenClientException(
+    message: String,
+) : Exception(message)
