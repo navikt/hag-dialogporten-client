@@ -15,6 +15,14 @@ data class CreateDialogRequest(
 )
 
 @Serializable
+data class AddTransmissionsRequest(
+    val transmissions: List<Transmission>,
+) {
+    val op = "add"
+    val path = "/transmissions"
+}
+
+@Serializable
 data class GuiAction(
     val action: String,
     val url: String,
@@ -156,26 +164,58 @@ fun lagNyDialogMedSykmeldingRequest(
         guiActions = emptyList(),
         transmissions =
             listOf(
-                Transmission(
-                    type = Transmission.TransmissionType.Information,
-                    sender = Transmission.Sender("ServiceOwner"),
-                    content =
-                        Content(
-                            title = lagContentValue("Sykmelding"),
-                            summary = lagContentValue("Sykmelding"),
-                        ),
-                    attachments =
+                lagVedleggTransmission(
+                    transmissionTittel = "Sykmelding",
+                    transmissionSammendrag = "Sykmelding",
+                    vedleggNavn = "Sykmelding.json",
+                    vedleggUrl = sykmeldingJsonUrl,
+                    vedleggMediaType = "application/json",
+                    vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
+                ),
+            ),
+    )
+
+fun oppdaterDialogMedSoknadRequest(soknadJsonUrl: String): AddTransmissionsRequest =
+    AddTransmissionsRequest(
+        transmissions =
+            listOf(
+                lagVedleggTransmission(
+                    transmissionTittel = "Søknad",
+                    transmissionSammendrag = "Søknad",
+                    vedleggNavn = "Søknad.json",
+                    vedleggUrl = soknadJsonUrl,
+                    vedleggMediaType = "application/json",
+                    vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
+                ),
+            ),
+    )
+
+private fun lagVedleggTransmission(
+    transmissionTittel: String,
+    transmissionSammendrag: String,
+    vedleggNavn: String,
+    vedleggUrl: String,
+    vedleggMediaType: String,
+    vedleggConsumerType: Transmission.AttachmentUrlConsumerType,
+): Transmission =
+    Transmission(
+        type = Transmission.TransmissionType.Information,
+        sender = Transmission.Sender("ServiceOwner"),
+        content =
+            Content(
+                title = lagContentValue(transmissionTittel),
+                summary = lagContentValue(transmissionSammendrag),
+            ),
+        attachments =
+            listOf(
+                Transmission.Attachment(
+                    displayName = listOf(ContentValueItem(vedleggNavn)),
+                    urls =
                         listOf(
-                            Transmission.Attachment(
-                                displayName = listOf(ContentValueItem("Sykmelding.json")),
-                                urls =
-                                    listOf(
-                                        Transmission.Url(
-                                            url = sykmeldingJsonUrl,
-                                            mediaType = "application/json",
-                                            consumerType = Transmission.AttachmentUrlConsumerType.Api,
-                                        ),
-                                    ),
+                            Transmission.Url(
+                                url = vedleggUrl,
+                                mediaType = vedleggMediaType,
+                                consumerType = vedleggConsumerType,
                             ),
                         ),
                 ),

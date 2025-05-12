@@ -2,6 +2,7 @@ package no.nav.helsearbeidsgiver.dialogporten
 
 import io.ktor.client.call.body
 import io.ktor.client.request.header
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import no.nav.helsearbeidsgiver.utils.log.logger
@@ -11,7 +12,7 @@ import java.util.UUID
 class DialogportenClient(
     private val baseUrl: String,
     private val ressurs: String,
-    private val getToken: () -> String,
+    getToken: () -> String,
 ) {
     private val httpClient = createHttpClient(1, getToken)
 
@@ -43,7 +44,7 @@ class DialogportenClient(
                     }.body()
             }.recover { e ->
                 "Feil ved kall til dialogporten endepunkt".also {
-                    logger.error(it, e)
+                    logger.error(it)
                     sikkerLogger.error(it, e)
                 }
                 throw DialogportenClientException("Feil ved kall til dialogporten endepunkt")
@@ -76,7 +77,28 @@ class DialogportenClient(
                 }.body()
         }.getOrElse { e ->
             "Feil ved kall til Dialogporten for å opprette dialog med sykemelding".also {
-                logger.error(it, e)
+                logger.error(it)
+                sikkerLogger.error(it, e)
+                throw DialogportenClientException(it)
+            }
+        }
+    }
+
+    suspend fun oppdaterDialogMedSoknad(
+        dialogId: String,
+        soknadJsonUrl: String,
+    ) {
+        val dialogPatchRequest = listOf(oppdaterDialogMedSoknadRequest(soknadJsonUrl = soknadJsonUrl))
+        runCatching<DialogportenClient, String> {
+            httpClient
+                .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
+                    header("Content-Type", "application/json")
+                    header("Accept", "application/json")
+                    setBody(dialogPatchRequest)
+                }.body()
+        }.getOrElse { e ->
+            "Feil ved kall til Dialogporten for å oppdatere dialog med søknad".also {
+                logger.error(it)
                 sikkerLogger.error(it, e)
                 throw DialogportenClientException(it)
             }
