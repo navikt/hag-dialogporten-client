@@ -89,13 +89,13 @@ class DialogportenClient(
         soknadJsonUrl: String,
     ) {
         val dialogPatchRequest = listOf(oppdaterDialogMedSoknadRequest(soknadJsonUrl = soknadJsonUrl))
-        runCatching<DialogportenClient, String> {
+        runCatching {
             httpClient
                 .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
                     header("Content-Type", "application/json")
                     header("Accept", "application/json")
                     setBody(dialogPatchRequest)
-                }.body()
+                }
         }.getOrElse { e ->
             "Feil ved kall til Dialogporten for å oppdatere dialog med søknad".also {
                 logger.error(it)
