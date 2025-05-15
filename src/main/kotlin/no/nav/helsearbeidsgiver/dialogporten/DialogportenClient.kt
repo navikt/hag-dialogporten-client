@@ -85,7 +85,7 @@ class DialogportenClient(
     }
 
     suspend fun oppdaterDialogMedSoknad(
-        dialogId: String,
+        dialogId: UUID,
         soknadJsonUrl: String,
     ) {
         val dialogPatchRequest = listOf(oppdaterDialogMedSoknadRequest(soknadJsonUrl = soknadJsonUrl))

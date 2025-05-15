@@ -16,7 +16,7 @@ class DialogportenClientTest :
 
         test("Opprett dialog gir valideringsfeil") {
             val dialogportenClient =
-                mockDialogportenClient(HttpStatusCode.BadRequest, "create-dialog-response/validation-error.json".readResource())
+                mockDialogportenClient(HttpStatusCode.BadRequest, "dialog-response/validation-error.json".readResource())
             shouldThrowExactly<DialogportenClientException> { dialogportenClient.opprettDialog(MockData.orgnr, "testurl").getOrThrow() }
         }
 
@@ -30,5 +30,26 @@ class DialogportenClientTest :
                     sykmeldingId = UUID.randomUUID(),
                     sykmeldingJsonUrl = "testurl.no",
                 ) shouldBe MockData.gyldingRespons
+        }
+
+        test("Oppdater dialog med søknad gir ingenting tilbake") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
+            dialogportenClient
+                .oppdaterDialogMedSoknad(
+                    dialogId = UUID.randomUUID(),
+                    soknadJsonUrl = "testurl.no",
+                )
+        }
+
+        test("Oppdatering av dialog med søknad kaster valideringsfeil videre ved 400-feil") {
+            val dialogportenClient =
+                mockDialogportenClient(HttpStatusCode.BadRequest, "dialog-response/validation-error.json".readResource())
+            shouldThrowExactly<DialogportenClientException> {
+                dialogportenClient
+                    .oppdaterDialogMedSoknad(
+                        dialogId = UUID.randomUUID(),
+                        soknadJsonUrl = "testurl.no",
+                    )
+            }
         }
     })
