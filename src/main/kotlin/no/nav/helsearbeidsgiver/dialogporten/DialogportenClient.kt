@@ -19,40 +19,7 @@ class DialogportenClient(
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-    suspend fun opprettDialog(
-        orgnr: String,
-        url: String,
-    ): Result<String> {
-        val dialogRequest =
-            lagCreateDialogRequest(
-                ressurs = ressurs,
-                orgnr = orgnr,
-                status = "New",
-                tittel = "Nav trenger inntektsmelding",
-                sammendrag =
-                    "En av dine ansatte har søkt om sykepenger for perioden DD.MM.ÅÅÅÅ - DD.MM.ÅÅÅÅ og vi trenger inntektsmelding for å behandle søknaden. Logg inn på Min side – arbeidsgiver hos Nav.",
-                url = url,
-                knappTittel = "Gå til inntektsmeldingskjema på Nav",
-            )
-        val dialogResponse: Result<String> =
-            runCatching<DialogportenClient, String> {
-                httpClient
-                    .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
-                        header("Content-Type", "application/json")
-                        header("Accept", "application/json")
-                        setBody(dialogRequest)
-                    }.body()
-            }.recover { e ->
-                "Feil ved kall til dialogporten endepunkt".also {
-                    logger.error(it)
-                    sikkerLogger.error(it, e)
-                }
-                throw DialogportenClientException("Feil ved kall til dialogporten endepunkt")
-            }
-        return dialogResponse
-    }
-
-    suspend fun opprettNyDialogMedSykmelding(
+    suspend fun opprettDialogMedSykmelding(
         orgnr: String,
         dialogTittel: String,
         dialogSammendrag: String,
@@ -60,7 +27,7 @@ class DialogportenClient(
         sykmeldingJsonUrl: String,
     ): String {
         val dialogRequest =
-            lagNyDialogMedSykmeldingRequest(
+            opprettDialogMedSykmeldingRequest(
                 ressurs = ressurs,
                 orgnr = orgnr,
                 dialogTittel = dialogTittel,

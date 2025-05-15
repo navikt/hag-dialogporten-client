@@ -5,11 +5,10 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.ContentValue
 import no.nav.helsearbeidsgiver.dialogporten.domene.ContentValueItem
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
-import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import java.util.UUID
 
-fun lagNyDialogMedSykmeldingRequest(
+fun opprettDialogMedSykmeldingRequest(
     ressurs: String,
     orgnr: String,
     dialogTittel: String,
@@ -23,7 +22,6 @@ fun lagNyDialogMedSykmeldingRequest(
         status = "New",
         externalRefererence = sykmeldingId.toString(),
         content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
-        guiActions = emptyList(),
         transmissions =
             listOf(
                 lagVedleggTransmission(
@@ -52,20 +50,6 @@ fun oppdaterDialogMedSoknadRequest(soknadJsonUrl: String): AddTransmissionsReque
             ),
     )
 
-fun lagGuiAction(
-    url: String,
-    tittel: String,
-) = GuiAction(
-    action = "read",
-    url = url,
-    title =
-        listOf(
-            ContentValueItem(
-                value = tittel,
-            ),
-        ),
-)
-
 private fun lagContentValue(verdi: String) =
     ContentValue(
         value =
@@ -74,25 +58,6 @@ private fun lagContentValue(verdi: String) =
                     value = verdi,
                 ),
             ),
-    )
-
-fun lagCreateDialogRequest(
-    ressurs: String,
-    orgnr: String,
-    status: String,
-    tittel: String,
-    sammendrag: String,
-    url: String,
-    knappTittel: String,
-): CreateDialogRequest =
-    CreateDialogRequest(
-        serviceResource = "urn:altinn:resource:$ressurs",
-        party = "urn:altinn:organization:identifier-no:$orgnr",
-        status = status,
-        externalRefererence = UUID.randomUUID().toString(),
-        content = Content(lagContentValue(tittel), lagContentValue(sammendrag)),
-        guiActions = listOf(lagGuiAction(url, knappTittel)),
-        transmissions = emptyList(),
     )
 
 private fun lagVedleggTransmission(

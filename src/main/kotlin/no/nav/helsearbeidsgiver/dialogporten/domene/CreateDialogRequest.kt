@@ -9,6 +9,5 @@ data class CreateDialogRequest(
     val externalRefererence: String,
     val status: String,
     val content: Content,
-    val guiActions: List<GuiAction>,
     val transmissions: List<Transmission>,
 )
