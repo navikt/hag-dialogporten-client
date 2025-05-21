@@ -37,7 +37,7 @@ fun opprettDialogMedSykmeldingRequest(
 
 fun oppdaterDialogMedSoknadRequest(soknadJsonUrl: String): AddTransmissionsRequest =
     AddTransmissionsRequest(
-        transmissions =
+        value =
             listOf(
                 lagVedleggTransmission(
                     transmissionTittel = "Søknad om sykepenger",
