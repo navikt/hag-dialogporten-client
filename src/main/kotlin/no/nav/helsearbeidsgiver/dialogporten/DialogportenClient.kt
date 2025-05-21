@@ -59,8 +59,7 @@ class DialogportenClient(
         runCatching {
             httpClient
                 .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
-                    header("Content-Type", "application/json")
-                    header("Accept", "application/json")
+                    header("Content-Type", "application/json-patch+json")
                     setBody(dialogPatchRequest)
                 }
         }.getOrElse { e ->
