@@ -51,11 +51,11 @@ class DialogportenClient(
         }
     }
 
-    suspend fun oppdaterDialogMedSoknad(
+    suspend fun oppdaterDialogMedSykepengesoknad(
         dialogId: UUID,
         soknadJsonUrl: String,
     ) {
-        val dialogPatchRequest = listOf(oppdaterDialogMedSoknadRequest(soknadJsonUrl = soknadJsonUrl))
+        val dialogPatchRequest = oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl = soknadJsonUrl)
         runCatching {
             httpClient
                 .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
@@ -63,7 +63,7 @@ class DialogportenClient(
                     setBody(dialogPatchRequest)
                 }
         }.getOrElse { e ->
-            "Feil ved kall til Dialogporten for å oppdatere dialog med søknad".also {
+            "Feil ved kall til Dialogporten for å oppdatere dialog med sykepengesøknad".also {
                 logger.error(it)
                 sikkerLogger.error(it, e)
                 throw DialogportenClientException(it)

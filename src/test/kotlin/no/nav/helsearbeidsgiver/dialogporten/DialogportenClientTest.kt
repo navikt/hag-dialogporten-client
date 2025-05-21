@@ -21,10 +21,10 @@ class DialogportenClientTest :
                 ) shouldBe MockData.gyldingRespons
         }
 
-        test("Oppdater dialog med søknad gir ingenting tilbake") {
+        test("Oppdater dialog med søknad gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             dialogportenClient
-                .oppdaterDialogMedSoknad(
+                .oppdaterDialogMedSykepengesoknad(
                     dialogId = UUID.randomUUID(),
                     soknadJsonUrl = "testurl.no",
                 )
@@ -32,7 +32,10 @@ class DialogportenClientTest :
 
         test("Oppretting av dialog med sykmelding kaster valideringsfeil videre ved 400-feil") {
             val dialogportenClient =
-                mockDialogportenClient(HttpStatusCode.BadRequest, "dialog-response/validation-error.json".readResource())
+                mockDialogportenClient(
+                    HttpStatusCode.BadRequest,
+                    "dialog-response/validation-error.json".readResource(),
+                )
             shouldThrowExactly<DialogportenClientException> {
                 dialogportenClient
                     .opprettDialogMedSykmelding(
@@ -47,10 +50,13 @@ class DialogportenClientTest :
 
         test("Oppdatering av dialog med søknad kaster valideringsfeil videre ved 400-feil") {
             val dialogportenClient =
-                mockDialogportenClient(HttpStatusCode.BadRequest, "dialog-response/validation-error.json".readResource())
+                mockDialogportenClient(
+                    HttpStatusCode.BadRequest,
+                    "dialog-response/validation-error.json".readResource(),
+                )
             shouldThrowExactly<DialogportenClientException> {
                 dialogportenClient
-                    .oppdaterDialogMedSoknad(
+                    .oppdaterDialogMedSykepengesoknad(
                         dialogId = UUID.randomUUID(),
                         soknadJsonUrl = "testurl.no",
                     )

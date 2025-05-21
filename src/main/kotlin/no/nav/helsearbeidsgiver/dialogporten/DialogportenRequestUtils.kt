@@ -35,19 +35,21 @@ fun opprettDialogMedSykmeldingRequest(
             ),
     )
 
-fun oppdaterDialogMedSoknadRequest(soknadJsonUrl: String): AddTransmissionsRequest =
-    AddTransmissionsRequest(
-        value =
-            listOf(
-                lagVedleggTransmission(
-                    transmissionTittel = "Søknad om sykepenger",
-                    transmissionSammendrag = "Søknad om sykepenger",
-                    vedleggNavn = "soknad-om-sykepenger.json",
-                    vedleggUrl = soknadJsonUrl,
-                    vedleggMediaType = "application/json",
-                    vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
+fun oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl: String): List<AddTransmissionsRequest> =
+    listOf(
+        AddTransmissionsRequest(
+            value =
+                listOf(
+                    lagVedleggTransmission(
+                        transmissionTittel = "Søknad om sykepenger",
+                        transmissionSammendrag = "Søknad om sykepenger",
+                        vedleggNavn = "soknad-om-sykepenger.json",
+                        vedleggUrl = soknadJsonUrl,
+                        vedleggMediaType = "application/json",
+                        vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
+                    ),
                 ),
-            ),
+        ),
     )
 
 private fun lagContentValue(verdi: String) =
