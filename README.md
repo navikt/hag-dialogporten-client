@@ -16,7 +16,7 @@ fun getToken(): String = "gyldig token"
 
 val dialogportenClient = DialogportenClient(
     baseUrl = "https://platform.tt02.altinn.no",
-    ressurs = "nav_sykepenger_inntektsmelding-nedlasting",
+    ressurs = "nav_sykepenger_inntektsmelding-nedlasting", // OBS: Her kommer det snart nye ressurser
     getToken = ::getToken
 )
 

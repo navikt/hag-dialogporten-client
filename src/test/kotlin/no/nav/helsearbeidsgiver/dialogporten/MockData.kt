@@ -3,8 +3,8 @@ package no.nav.helsearbeidsgiver.dialogporten
 import java.util.UUID
 
 object MockData {
-    val orgnr = "312824450"
-    val ressurs = "nav_sykepenger_inntektsmelding-nedlasting"
+    val orgnr = "123456789"
+    val ressurs = "ressursnavn"
     val dialogRequest =
         opprettDialogMedSykmeldingRequest(
             ressurs = ressurs,
