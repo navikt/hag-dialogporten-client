@@ -27,6 +27,7 @@ fun opprettDialogMedSykmeldingRequest(
                 lagVedleggTransmission(
                     transmissionTittel = "Sykmelding",
                     transmissionSammendrag = "Sykmelding",
+                    vedleggType = Transmission.ExtendedType.SYKMELDING,
                     vedleggNavn = "Sykmelding.json",
                     vedleggUrl = sykmeldingJsonUrl,
                     vedleggMediaType = "application/json",
@@ -43,6 +44,7 @@ fun oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl: String): List<AddTran
                     lagVedleggTransmission(
                         transmissionTittel = "Søknad om sykepenger",
                         transmissionSammendrag = "Søknad om sykepenger",
+                        vedleggType = Transmission.ExtendedType.SYKEPENGESOKNAD,
                         vedleggNavn = "soknad-om-sykepenger.json",
                         vedleggUrl = soknadJsonUrl,
                         vedleggMediaType = "application/json",
@@ -65,6 +67,7 @@ private fun lagContentValue(verdi: String) =
 private fun lagVedleggTransmission(
     transmissionTittel: String,
     transmissionSammendrag: String,
+    vedleggType: Transmission.ExtendedType,
     vedleggNavn: String,
     vedleggUrl: String,
     vedleggMediaType: String,
@@ -72,6 +75,7 @@ private fun lagVedleggTransmission(
 ): Transmission =
     Transmission(
         type = Transmission.TransmissionType.Information,
+        extendedType = vedleggType,
         sender = Transmission.Sender("ServiceOwner"),
         content =
             Content(

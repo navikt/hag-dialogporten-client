@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Transmission(
     val type: TransmissionType,
+    val extendedType: ExtendedType,
     val sender: Sender,
     val content: Content,
     val attachments: List<Attachment>,
@@ -27,6 +28,15 @@ data class Transmission(
 
         // Question/request for more information
         Request,
+    }
+
+    /**
+     *  Kan brukes av LPS-systemer til å gjenkjenne ulike typer vedlegg (f.eks. sykmelding eller søknad om sykepenger).
+     */
+    @Serializable
+    enum class ExtendedType {
+        SYKMELDING,
+        SYKEPENGESOKNAD,
     }
 
     @Serializable
