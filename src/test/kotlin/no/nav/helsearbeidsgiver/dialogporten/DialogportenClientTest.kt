@@ -24,9 +24,9 @@ class DialogportenClientTest :
         test("Oppdater dialog med søknad gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             dialogportenClient
-                .oppdaterDialogMedSykepengesoknad(
+                .oppdaterDialogMedSykepengesoeknad(
                     dialogId = UUID.randomUUID(),
-                    soknadJsonUrl = "testurl.no",
+                    soeknadJsonUrl = "testurl.no",
                 )
         }
 
@@ -56,9 +56,9 @@ class DialogportenClientTest :
                 )
             shouldThrowExactly<DialogportenClientException> {
                 dialogportenClient
-                    .oppdaterDialogMedSykepengesoknad(
+                    .oppdaterDialogMedSykepengesoeknad(
                         dialogId = UUID.randomUUID(),
-                        soknadJsonUrl = "testurl.no",
+                        soeknadJsonUrl = "testurl.no",
                     )
             }
         }

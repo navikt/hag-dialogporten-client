@@ -36,7 +36,7 @@ data class Transmission(
     @Serializable
     enum class ExtendedType {
         SYKMELDING,
-        SYKEPENGESOKNAD,
+        SYKEPENGESOEKNAD,
     }
 
     @Serializable

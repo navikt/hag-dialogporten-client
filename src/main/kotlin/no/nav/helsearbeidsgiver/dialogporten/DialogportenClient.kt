@@ -51,11 +51,11 @@ class DialogportenClient(
         }
     }
 
-    suspend fun oppdaterDialogMedSykepengesoknad(
+    suspend fun oppdaterDialogMedSykepengesoeknad(
         dialogId: UUID,
-        soknadJsonUrl: String,
+        soeknadJsonUrl: String,
     ) {
-        val dialogPatchRequest = oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl = soknadJsonUrl)
+        val dialogPatchRequest = oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl = soeknadJsonUrl)
         runCatching {
             httpClient
                 .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
