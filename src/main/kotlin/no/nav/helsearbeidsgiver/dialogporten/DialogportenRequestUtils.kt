@@ -36,7 +36,7 @@ fun opprettDialogMedSykmeldingRequest(
             ),
     )
 
-fun oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl: String): List<AddTransmissionsRequest> =
+fun oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl: String): List<AddTransmissionsRequest> =
     listOf(
         AddTransmissionsRequest(
             value =
@@ -44,9 +44,9 @@ fun oppdaterDialogMedSykepengesoknadRequest(soknadJsonUrl: String): List<AddTran
                     lagVedleggTransmission(
                         transmissionTittel = "Søknad om sykepenger",
                         transmissionSammendrag = "Søknad om sykepenger",
-                        vedleggType = Transmission.ExtendedType.SYKEPENGESOKNAD,
-                        vedleggNavn = "soknad-om-sykepenger.json",
-                        vedleggUrl = soknadJsonUrl,
+                        vedleggType = Transmission.ExtendedType.SYKEPENGESOEKNAD,
+                        vedleggNavn = "soeknad-om-sykepenger.json",
+                        vedleggUrl = soeknadJsonUrl,
                         vedleggMediaType = "application/json",
                         vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
                     ),
