@@ -33,7 +33,7 @@ class DialogportenClientTest :
         test("Oppdater dialog med forespørsel om inntektsmelding gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             dialogportenClient
-                .oppdaterDialogMedForespoerselOmInntektsmelding(
+                .oppdaterDialogMedInntektsmeldingforespoersel(
                     dialogId = UUID.randomUUID(),
                     forespoerselUrl = "testurl.no",
                     forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
@@ -81,7 +81,7 @@ class DialogportenClientTest :
                 )
             shouldThrowExactly<DialogportenClientException> {
                 dialogportenClient
-                    .oppdaterDialogMedForespoerselOmInntektsmelding(
+                    .oppdaterDialogMedInntektsmeldingforespoersel(
                         dialogId = UUID.randomUUID(),
                         forespoerselUrl = "testurl.no",
                         forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",

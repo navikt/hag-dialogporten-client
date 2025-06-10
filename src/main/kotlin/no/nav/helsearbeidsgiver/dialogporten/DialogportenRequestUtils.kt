@@ -59,7 +59,7 @@ fun oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl: String): List<Patch
         ),
     )
 
-fun oppdaterDialogMedForespoerselOmInntektsmeldingRequest(
+fun oppdaterDialogMedInntektsmeldingforespoerselRequest(
     forespoerselUrl: String,
     forespoerselDokumentasjonUrl: String,
 ): List<PatchOperation> =
