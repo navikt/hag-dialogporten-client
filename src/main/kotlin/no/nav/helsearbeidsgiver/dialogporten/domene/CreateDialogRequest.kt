@@ -7,7 +7,7 @@ data class CreateDialogRequest(
     val serviceResource: String,
     val party: String,
     val externalRefererence: String,
-    val status: String,
+    val status: DialogStatus,
     val content: Content,
     val transmissions: List<Transmission>,
 )
