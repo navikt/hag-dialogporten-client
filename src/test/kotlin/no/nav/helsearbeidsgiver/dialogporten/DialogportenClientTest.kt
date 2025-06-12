@@ -40,7 +40,7 @@ class DialogportenClientTest :
                 )
         }
 
-        test("Oppretting av dialog med sykmelding kaster feil videre ved 400-feil") {
+        test("Oppretting av dialog med sykmelding kaster feil videre ved 400-feil fra Dialogporten") {
             val dialogportenClient =
                 mockDialogportenClient(
                     HttpStatusCode.BadRequest,
@@ -58,7 +58,7 @@ class DialogportenClientTest :
             }
         }
 
-        test("Oppdatering av dialog med søknad kaster feil videre ved 400-feil") {
+        test("Oppdatering av dialog med søknad kaster feil videre ved 400-feil fra Dialogporten") {
             val dialogportenClient =
                 mockDialogportenClient(
                     HttpStatusCode.BadRequest,
@@ -73,7 +73,7 @@ class DialogportenClientTest :
             }
         }
 
-        test("Oppdatering av dialog med forespørsel om inntektsmelding kaster feil videre ved 400-feil") {
+        test("Oppdatering av dialog med forespørsel om inntektsmelding kaster feil videre ved 400-feil fra Dialogporten") {
             val dialogportenClient =
                 mockDialogportenClient(
                     HttpStatusCode.BadRequest,
