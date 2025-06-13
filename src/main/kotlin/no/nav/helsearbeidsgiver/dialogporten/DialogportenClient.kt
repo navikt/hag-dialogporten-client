@@ -71,13 +71,13 @@ class DialogportenClient(
         }
     }
 
-    suspend fun oppdaterDialogMedInntektsmeldingforespoersel(
+    suspend fun oppdaterDialogMedInntektsmeldingsforespoersel(
         dialogId: UUID,
         forespoerselUrl: String,
         forespoerselDokumentasjonUrl: String,
     ) {
         val dialogPatchRequest =
-            oppdaterDialogMedInntektsmeldingforespoerselRequest(
+            oppdaterDialogMedInntektsmeldingsforespoerselRequest(
                 forespoerselUrl = forespoerselUrl,
                 forespoerselDokumentasjonUrl = forespoerselDokumentasjonUrl,
             )

@@ -3,32 +3,28 @@ package no.nav.helsearbeidsgiver.dialogporten.domene
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class PatchOperation(
-    @Suppress("unused")
-    val op: String,
-    val path: String,
-)
+sealed class PatchOperation {
+    abstract val op: String
+    abstract val path: String
+}
 
 @Serializable
 data class AddTransmissions(
     val value: List<Transmission>,
-) : PatchOperation(
-        op = "add",
-        path = "/transmissions",
-    )
+    override val op: String = "add",
+    override val path: String = "/transmissions",
+) : PatchOperation()
 
 @Serializable
 data class AddStatus(
     val value: DialogStatus,
-) : PatchOperation(
-        op = "add",
-        path = "/status",
-    )
+    override val op: String = "add",
+    override val path: String = "/status",
+) : PatchOperation()
 
 @Serializable
 data class AddApiActions(
     val value: List<ApiAction>,
-) : PatchOperation(
-        op = "add",
-        path = "/apiActions",
-    )
+    override val op: String = "add",
+    override val path: String = "/api-actions",
+) : PatchOperation()

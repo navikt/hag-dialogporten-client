@@ -1,5 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -23,21 +24,26 @@ class DialogportenClientTest :
 
         test("Oppdater dialog med søknad gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
-            dialogportenClient
-                .oppdaterDialogMedSykepengesoeknad(
-                    dialogId = UUID.randomUUID(),
-                    soeknadJsonUrl = "testurl.no",
-                )
+            shouldNotThrowAny {
+                dialogportenClient
+                    .oppdaterDialogMedSykepengesoeknad(
+                        dialogId = UUID.randomUUID(),
+                        soeknadJsonUrl = "testurl.no",
+                    )
+            }
         }
 
         test("Oppdater dialog med forespørsel om inntektsmelding gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
-            dialogportenClient
-                .oppdaterDialogMedInntektsmeldingforespoersel(
-                    dialogId = UUID.randomUUID(),
-                    forespoerselUrl = "testurl.no",
-                    forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
-                )
+
+            shouldNotThrowAny {
+                dialogportenClient
+                    .oppdaterDialogMedInntektsmeldingsforespoersel(
+                        dialogId = UUID.randomUUID(),
+                        forespoerselUrl = "testurl.no",
+                        forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
+                    )
+            }
         }
 
         test("Oppretting av dialog med sykmelding kaster feil videre ved 400-feil fra Dialogporten") {
@@ -81,7 +87,7 @@ class DialogportenClientTest :
                 )
             shouldThrowExactly<DialogportenClientException> {
                 dialogportenClient
-                    .oppdaterDialogMedInntektsmeldingforespoersel(
+                    .oppdaterDialogMedInntektsmeldingsforespoersel(
                         dialogId = UUID.randomUUID(),
                         forespoerselUrl = "testurl.no",
                         forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",

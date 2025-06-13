@@ -31,7 +31,7 @@ data class Transmission(
     }
 
     /**
-     *  Kan brukes av LPS-systemer til å gjenkjenne ulike typer vedlegg (f.eks. sykmelding eller søknad om sykepenger) eller forespørsel om inntektsmelding.
+     *  Kan brukes av LPS-systemer til å gjenkjenne ulike typer vedlegg (f.eks. sykmelding, søknad om sykepenger eller forespørsel om inntektsmelding).
      */
     @Serializable
     enum class ExtendedType {
