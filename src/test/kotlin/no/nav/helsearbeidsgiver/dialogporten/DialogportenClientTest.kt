@@ -1,5 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -23,14 +24,29 @@ class DialogportenClientTest :
 
         test("Oppdater dialog med søknad gir ingen respons tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
-            dialogportenClient
-                .oppdaterDialogMedSykepengesoeknad(
-                    dialogId = UUID.randomUUID(),
-                    soeknadJsonUrl = "testurl.no",
-                )
+            shouldNotThrowAny {
+                dialogportenClient
+                    .oppdaterDialogMedSykepengesoeknad(
+                        dialogId = UUID.randomUUID(),
+                        soeknadJsonUrl = "testurl.no",
+                    )
+            }
         }
 
-        test("Oppretting av dialog med sykmelding kaster valideringsfeil videre ved 400-feil") {
+        test("Oppdater dialog med forespørsel om inntektsmelding gir ingen respons tilbake") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
+
+            shouldNotThrowAny {
+                dialogportenClient
+                    .oppdaterDialogMedInntektsmeldingsforespoersel(
+                        dialogId = UUID.randomUUID(),
+                        forespoerselUrl = "testurl.no",
+                        forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
+                    )
+            }
+        }
+
+        test("Oppretting av dialog med sykmelding kaster feil videre ved 400-feil fra Dialogporten") {
             val dialogportenClient =
                 mockDialogportenClient(
                     HttpStatusCode.BadRequest,
@@ -48,7 +64,7 @@ class DialogportenClientTest :
             }
         }
 
-        test("Oppdatering av dialog med søknad kaster valideringsfeil videre ved 400-feil") {
+        test("Oppdatering av dialog med søknad kaster feil videre ved 400-feil fra Dialogporten") {
             val dialogportenClient =
                 mockDialogportenClient(
                     HttpStatusCode.BadRequest,
@@ -59,6 +75,22 @@ class DialogportenClientTest :
                     .oppdaterDialogMedSykepengesoeknad(
                         dialogId = UUID.randomUUID(),
                         soeknadJsonUrl = "testurl.no",
+                    )
+            }
+        }
+
+        test("Oppdatering av dialog med forespørsel om inntektsmelding kaster feil videre ved 400-feil fra Dialogporten") {
+            val dialogportenClient =
+                mockDialogportenClient(
+                    HttpStatusCode.BadRequest,
+                    "dialog-response/validation-error.json".readResource(),
+                )
+            shouldThrowExactly<DialogportenClientException> {
+                dialogportenClient
+                    .oppdaterDialogMedInntektsmeldingsforespoersel(
+                        dialogId = UUID.randomUUID(),
+                        forespoerselUrl = "testurl.no",
+                        forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
                     )
             }
         }
