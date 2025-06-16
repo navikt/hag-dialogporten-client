@@ -26,5 +26,5 @@ data class AddStatus(
 data class AddApiActions(
     val value: List<ApiAction>,
     override val op: String = "add",
-    override val path: String = "/api-actions",
+    override val path: String = "/apiActions",
 ) : PatchOperation()
