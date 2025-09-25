@@ -35,7 +35,7 @@ class DialogportenClient(
                 dialogSammendrag = dialogSammendrag,
                 sykmeldingId = sykmeldingId,
                 sykmeldingJsonUrl = sykmeldingJsonUrl,
-                isApiOnly = isApiOnly,
+                kunForApi = isApiOnly,
             )
         return runCatching<DialogportenClient, String> {
             httpClient
