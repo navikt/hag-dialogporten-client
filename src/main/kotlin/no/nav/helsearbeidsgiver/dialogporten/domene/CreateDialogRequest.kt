@@ -10,5 +10,5 @@ data class CreateDialogRequest(
     val status: DialogStatus,
     val content: Content,
     val transmissions: List<Transmission>,
-    val isApiOnly: Boolean,
+    val isApiOnly: Boolean?,
 )
