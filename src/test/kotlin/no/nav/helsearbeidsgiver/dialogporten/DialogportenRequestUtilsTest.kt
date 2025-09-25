@@ -22,5 +22,6 @@ class DialogportenRequestUtilsTest :
             requestString shouldContain "testtittel"
             requestString shouldContain "testdialogsammendrag"
             requestString shouldContain "test-sykmelding-url.no"
+            requestString shouldContain """isApiOnly":true"""
         }
     })
