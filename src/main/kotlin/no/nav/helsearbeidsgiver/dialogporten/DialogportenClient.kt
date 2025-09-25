@@ -25,6 +25,7 @@ class DialogportenClient(
         dialogSammendrag: String,
         sykmeldingId: UUID,
         sykmeldingJsonUrl: String,
+        kunForApi: Boolean = true,
     ): String {
         val dialogRequest =
             opprettDialogMedSykmeldingRequest(
@@ -34,6 +35,7 @@ class DialogportenClient(
                 dialogSammendrag = dialogSammendrag,
                 sykmeldingId = sykmeldingId,
                 sykmeldingJsonUrl = sykmeldingJsonUrl,
+                kunForApi = kunForApi,
             )
         return runCatching<DialogportenClient, String> {
             httpClient
