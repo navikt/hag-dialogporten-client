@@ -20,6 +20,7 @@ fun opprettDialogMedSykmeldingRequest(
     dialogSammendrag: String,
     sykmeldingId: UUID,
     sykmeldingJsonUrl: String,
+    isApiOnly: Boolean = true,
 ): CreateDialogRequest =
     CreateDialogRequest(
         serviceResource = "urn:altinn:resource:$ressurs",
@@ -39,6 +40,7 @@ fun opprettDialogMedSykmeldingRequest(
                     vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api,
                 ),
             ),
+        isApiOnly = isApiOnly,
     )
 
 fun oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl: String): List<PatchOperation> =
