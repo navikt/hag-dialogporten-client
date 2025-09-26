@@ -32,7 +32,6 @@ fun opprettDialogMedSykmeldingRequest(
             listOf(
                 lagVedleggTransmission(
                     transmissionTittel = "Sykmelding",
-                    transmissionSammendrag = "Sykmelding",
                     vedleggType = Transmission.ExtendedType.SYKMELDING,
                     vedleggNavn = "Sykmelding.json",
                     vedleggUrl = sykmeldingJsonUrl,

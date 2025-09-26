@@ -32,7 +32,7 @@ class DialogportenRequestUtilsTest :
             requestString shouldContain "urn:altinn:resource:ressursnavn"
             requestString shouldContain "urn:altinn:organization:identifier-no:123456789"
             requestString shouldContain "testtittel"
-            requestString shouldNotContain "testdialogsammendrag"
+            requestString shouldNotContain "summary"
             requestString shouldContain "test-sykmelding-url.no"
             requestString shouldContain """isApiOnly":true"""
         }
