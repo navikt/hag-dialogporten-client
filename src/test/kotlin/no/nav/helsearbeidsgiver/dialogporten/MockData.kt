@@ -28,5 +28,4 @@ object MockDataUtenSammendrag {
             sykmeldingId = UUID.randomUUID(),
             sykmeldingJsonUrl = "test-sykmelding-url.no",
         )
-    val gyldingRespons = "0194cb3a-6f4e-7707-a506-a1db2b5c37fa"
 }
