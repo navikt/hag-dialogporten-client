@@ -50,7 +50,6 @@ fun oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl: String): List<Patch
                 listOf(
                     lagVedleggTransmission(
                         transmissionTittel = "Søknad om sykepenger",
-                        transmissionSammendrag = "Søknad om sykepenger",
                         vedleggType = Transmission.ExtendedType.SYKEPENGESOEKNAD,
                         vedleggNavn = "soeknad-om-sykepenger.json",
                         vedleggUrl = soeknadJsonUrl,
@@ -95,7 +94,6 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
                         content =
                             Content(
                                 title = lagContentValue("Forespørsel om inntektsmelding"),
-                                summary = lagContentValue("Forespørsel om inntektsmelding"),
                             ),
                         attachments = emptyList(),
                     ),
@@ -115,7 +113,7 @@ private fun lagContentValue(verdi: String) =
 
 private fun lagVedleggTransmission(
     transmissionTittel: String,
-    transmissionSammendrag: String,
+    transmissionSammendrag: String? = null,
     vedleggType: Transmission.ExtendedType,
     vedleggNavn: String,
     vedleggUrl: String,
@@ -129,7 +127,7 @@ private fun lagVedleggTransmission(
         content =
             Content(
                 title = lagContentValue(transmissionTittel),
-                summary = lagContentValue(transmissionSammendrag),
+                summary = transmissionSammendrag?.let { lagContentValue(it) },
             ),
         attachments =
             listOf(
