@@ -17,7 +17,7 @@ fun opprettDialogMedSykmeldingRequest(
     ressurs: String,
     orgnr: String,
     dialogTittel: String,
-    dialogSammendrag: String,
+    dialogSammendrag: String? = null,
     sykmeldingId: UUID,
     sykmeldingJsonUrl: String,
     kunForApi: Boolean = true,
@@ -27,7 +27,7 @@ fun opprettDialogMedSykmeldingRequest(
         party = "urn:altinn:organization:identifier-no:$orgnr",
         status = DialogStatus.New,
         externalRefererence = sykmeldingId.toString(),
-        content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
+        content = Content(lagContentValue(dialogTittel), dialogSammendrag?.let { lagContentValue(it) }),
         transmissions =
             listOf(
                 lagVedleggTransmission(
