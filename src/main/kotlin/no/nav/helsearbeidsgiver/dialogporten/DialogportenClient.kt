@@ -22,7 +22,7 @@ class DialogportenClient(
     suspend fun opprettDialogMedSykmelding(
         orgnr: String,
         dialogTittel: String,
-        dialogSammendrag: String,
+        dialogSammendrag: String? = null,
         sykmeldingId: UUID,
         sykmeldingJsonUrl: String,
         kunForApi: Boolean = true,

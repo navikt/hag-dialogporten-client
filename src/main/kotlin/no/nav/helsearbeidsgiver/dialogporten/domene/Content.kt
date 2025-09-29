@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Content(
     val title: ContentValue,
-    val summary: ContentValue,
+    val summary: ContentValue? = null,
 )
 
 @Serializable

@@ -17,7 +17,7 @@ fun opprettDialogMedSykmeldingRequest(
     ressurs: String,
     orgnr: String,
     dialogTittel: String,
-    dialogSammendrag: String,
+    dialogSammendrag: String? = null,
     sykmeldingId: UUID,
     sykmeldingJsonUrl: String,
     kunForApi: Boolean = true,
@@ -27,12 +27,11 @@ fun opprettDialogMedSykmeldingRequest(
         party = "urn:altinn:organization:identifier-no:$orgnr",
         status = DialogStatus.New,
         externalRefererence = sykmeldingId.toString(),
-        content = Content(lagContentValue(dialogTittel), lagContentValue(dialogSammendrag)),
+        content = Content(lagContentValue(dialogTittel), dialogSammendrag?.let { lagContentValue(it) }),
         transmissions =
             listOf(
                 lagVedleggTransmission(
                     transmissionTittel = "Sykmelding",
-                    transmissionSammendrag = "Sykmelding",
                     vedleggType = Transmission.ExtendedType.SYKMELDING,
                     vedleggNavn = "Sykmelding.json",
                     vedleggUrl = sykmeldingJsonUrl,
@@ -50,7 +49,6 @@ fun oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl: String): List<Patch
                 listOf(
                     lagVedleggTransmission(
                         transmissionTittel = "Søknad om sykepenger",
-                        transmissionSammendrag = "Søknad om sykepenger",
                         vedleggType = Transmission.ExtendedType.SYKEPENGESOEKNAD,
                         vedleggNavn = "soeknad-om-sykepenger.json",
                         vedleggUrl = soeknadJsonUrl,
@@ -95,7 +93,6 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
                         content =
                             Content(
                                 title = lagContentValue("Forespørsel om inntektsmelding"),
-                                summary = lagContentValue("Forespørsel om inntektsmelding"),
                             ),
                         attachments = emptyList(),
                     ),
@@ -115,7 +112,7 @@ private fun lagContentValue(verdi: String) =
 
 private fun lagVedleggTransmission(
     transmissionTittel: String,
-    transmissionSammendrag: String,
+    transmissionSammendrag: String? = null,
     vedleggType: Transmission.ExtendedType,
     vedleggNavn: String,
     vedleggUrl: String,
@@ -129,7 +126,7 @@ private fun lagVedleggTransmission(
         content =
             Content(
                 title = lagContentValue(transmissionTittel),
-                summary = lagContentValue(transmissionSammendrag),
+                summary = transmissionSammendrag?.let { lagContentValue(it) },
             ),
         attachments =
             listOf(
