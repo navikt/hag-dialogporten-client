@@ -100,6 +100,43 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
         ),
     )
 
+fun oppdaterDialogMedInntektsmeldingRequest(
+    inntektsmeldingUrl: String,
+    relatedTransmissionId: UUID,
+    vedleggUrl: String,
+): List<PatchOperation> =
+    listOf(
+        AddTransmissions(
+            value =
+                listOf(
+                    Transmission(
+                        type = Transmission.TransmissionType.Submission,
+                        relatedTransmissionId = relatedTransmissionId,
+                        extendedType = Transmission.ExtendedType.INNTEKTSMELDING,
+                        sender = Transmission.Sender("ServiceOwner"),
+                        content =
+                            Content(
+                                title = lagContentValue("Inntektsmelding mottatt"),
+                            ),
+                        attachments =
+                            listOf(
+                                Transmission.Attachment(
+                                    displayName = listOf(ContentValueItem("Inntektsmelding.json")),
+                                    urls =
+                                        listOf(
+                                            Transmission.Url(
+                                                url = vedleggUrl,
+                                                mediaType = "application/json",
+                                                consumerType = Transmission.AttachmentUrlConsumerType.Api,
+                                            ),
+                                        ),
+                                ),
+                            ),
+                    ),
+                ),
+        ),
+    )
+
 private fun lagContentValue(verdi: String) =
     ContentValue(
         value =

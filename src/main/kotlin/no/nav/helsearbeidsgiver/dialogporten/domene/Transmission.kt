@@ -1,10 +1,16 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
+import java.util.UUID
 
 @Serializable
 data class Transmission(
     val type: TransmissionType,
+    val relatedTransmissionId: UUID? = null,
     val extendedType: ExtendedType,
     val sender: Sender,
     val content: Content,
@@ -28,6 +34,9 @@ data class Transmission(
 
         // Question/request for more information
         Request,
+
+        // Actual submission of information
+        Submission,
     }
 
     /**

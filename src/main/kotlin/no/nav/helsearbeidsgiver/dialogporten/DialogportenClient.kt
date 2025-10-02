@@ -97,6 +97,32 @@ class DialogportenClient(
             }
         }
     }
+
+    suspend fun oppdaterDialogMedInntektsmelding(
+        dialogId: UUID,
+        inntektsmeldingUrl: String,
+        relatertForespoerselId: UUID,
+    ) {
+        val inntektsmeldingPatchRequest =
+            oppdaterDialogMedInntektsmeldingRequest(
+                inntektsmeldingUrl = inntektsmeldingUrl,
+                relatedTransmissionId = relatertForespoerselId,
+                vedleggUrl = inntektsmeldingUrl,
+            )
+        runCatching {
+            httpClient
+                .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
+                    header("Content-Type", "application/json-patch+json")
+                    setBody(inntektsmeldingPatchRequest)
+                }
+        }.getOrElse { e ->
+            "Feil ved kall til Dialogporten for å oppdatere dialog med inntektsmelding".also {
+                logger.error(it)
+                sikkerLogger.error(it, e)
+                throw DialogportenClientException(it)
+            }
+        }
+    }
 }
 
 class DialogportenClientException(
