@@ -100,18 +100,13 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
         ),
     )
 
-fun oppdaterDialogMedInntektsmeldingRequest(
-    inntektsmeldingUrl: String,
-    relatedTransmissionId: UUID,
-    vedleggUrl: String,
-): List<PatchOperation> =
+fun oppdaterDialogMedInntektsmeldingRequest(vedleggUrl: String): List<PatchOperation> =
     listOf(
         AddTransmissions(
             value =
                 listOf(
                     Transmission(
                         type = Transmission.TransmissionType.Submission,
-                        relatedTransmissionId = relatedTransmissionId,
                         extendedType = Transmission.ExtendedType.INNTEKTSMELDING,
                         sender = Transmission.Sender("ServiceOwner"),
                         content =

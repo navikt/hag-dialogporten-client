@@ -101,12 +101,9 @@ class DialogportenClient(
     suspend fun oppdaterDialogMedInntektsmelding(
         dialogId: UUID,
         inntektsmeldingUrl: String,
-        relatertForespoerselId: UUID,
     ) {
         val inntektsmeldingPatchRequest =
             oppdaterDialogMedInntektsmeldingRequest(
-                inntektsmeldingUrl = inntektsmeldingUrl,
-                relatedTransmissionId = relatertForespoerselId,
                 vedleggUrl = inntektsmeldingUrl,
             )
         runCatching {
