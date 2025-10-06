@@ -2,11 +2,11 @@
 
 Klient for å opprette dialoger på dialogporten
 
-For oversikt over altinn sitt dialogporten api se [altinn sin dokumentasjon](https://docs.altinn.studio/dialogporten/reference/openapi/)
+For oversikt over altinn sitt dialogporten api se [altinn sin dokumentasjon](https://docs.altinn.studio/nb/dialogporten/reference/openapi/)
 
 ### Forutsetninger
 - Maskinporten klient/integrasjon med tilgang til scope: `digdir:dialogporten.serviceprovider`
-- Veksle maskinporten token til altinnToken, se [altinn sin guide](https://docs.altinn.studio/api/scenarios/authentication/#exchange-of-jwt-token)
+- Veksle maskinporten token til altinnToken, se [altinn sin guide](https://docs.altinn.studio/nb/api/scenarios/authentication/#exchange-of-jwt-token)
 - Registrert ressurs i ressurs registeret til altinn
 
 ### Klienten kan brukes slik
