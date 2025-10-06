@@ -5,6 +5,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
@@ -101,10 +102,12 @@ class DialogportenClient(
     suspend fun oppdaterDialogMedInntektsmelding(
         dialogId: UUID,
         inntektsmeldingUrl: String,
+        transmissionType: Transmission.TransmissionType,
     ) {
         val inntektsmeldingPatchRequest =
             oppdaterDialogMedInntektsmeldingRequest(
                 vedleggUrl = inntektsmeldingUrl,
+                transmissionType = transmissionType,
             )
         runCatching {
             httpClient

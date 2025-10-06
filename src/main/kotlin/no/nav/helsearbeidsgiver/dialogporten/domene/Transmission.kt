@@ -46,6 +46,7 @@ data class Transmission(
     enum class ExtendedType {
         SYKMELDING,
         SYKEPENGESOEKNAD,
+        FORESPOERSEL,
         INNTEKTSMELDING,
     }
 

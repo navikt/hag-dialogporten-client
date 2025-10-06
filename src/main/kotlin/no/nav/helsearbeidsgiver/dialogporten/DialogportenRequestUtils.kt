@@ -88,7 +88,7 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
                 listOf(
                     Transmission(
                         type = Transmission.TransmissionType.Request,
-                        extendedType = Transmission.ExtendedType.INNTEKTSMELDING,
+                        extendedType = Transmission.ExtendedType.FORESPOERSEL,
                         sender = Transmission.Sender("ServiceOwner"),
                         content =
                             Content(
@@ -100,13 +100,16 @@ fun oppdaterDialogMedInntektsmeldingsforespoerselRequest(
         ),
     )
 
-fun oppdaterDialogMedInntektsmeldingRequest(vedleggUrl: String): List<PatchOperation> =
+fun oppdaterDialogMedInntektsmeldingRequest(
+    vedleggUrl: String,
+    transmissionType: Transmission.TransmissionType,
+): List<PatchOperation> =
     listOf(
         AddTransmissions(
             value =
                 listOf(
                     Transmission(
-                        type = Transmission.TransmissionType.Submission,
+                        type = transmissionType,
                         extendedType = Transmission.ExtendedType.INNTEKTSMELDING,
                         sender = Transmission.Sender("ServiceOwner"),
                         content =
