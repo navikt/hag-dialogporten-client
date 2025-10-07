@@ -13,6 +13,8 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
+import no.nav.helsearbeidsgiver.utils.json.fromJson
+import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
@@ -49,7 +51,7 @@ class DialogportenKlient(
 
                         setBody(createDialogRequest)
                     }.body<String>()
-            return UUID.fromString(response)
+            return response.fromJson(UuidSerializer)
         }.getOrElse { e ->
             handleError("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
@@ -67,7 +69,7 @@ class DialogportenKlient(
                         setBody(transmission)
                     }.body<String>()
 
-            return UUID.fromString(response)
+            return response.fromJson(UuidSerializer)
         }.getOrElse { e ->
             handleError("Feil ved kall til Dialogporten for å legge til transmission", e)
         }

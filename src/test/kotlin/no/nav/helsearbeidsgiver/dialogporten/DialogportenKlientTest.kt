@@ -12,7 +12,7 @@ class DialogportenKlientTest :
     FunSpec({
         test("Opprett dialog  gir id tilbake") {
 
-            val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.Created, MockData.gyldingRespons)
+            val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.Created, MockData.gyligResponseUUID)
             val request =
                 CreateDialogRequest(
                     serviceResource = "urn:altinn:resource:ressursnavn",
