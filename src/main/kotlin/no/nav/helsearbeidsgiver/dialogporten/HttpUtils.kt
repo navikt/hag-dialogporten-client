@@ -5,6 +5,7 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.apache5.Apache5
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.auth.Auth
@@ -16,15 +17,22 @@ import kotlinx.serialization.json.Json
 import no.nav.helsearbeidsgiver.utils.json.jsonConfig
 
 internal fun createHttpClient(
+    baseUrl: String,
     maxRetries: Int,
     getToken: () -> String,
-): HttpClient = HttpClient(Apache5) { configure(maxRetries, getToken) }
+): HttpClient = HttpClient(Apache5) { configure(baseUrl, maxRetries, getToken) }
 
 internal fun HttpClientConfig<*>.configure(
+    baseUrl: String,
     retries: Int,
     getToken: () -> String,
 ) {
     expectSuccess = true
+
+    install(DefaultRequest) {
+        url(baseUrl)
+    }
+
     install(ContentNegotiation) {
         json(jsonConfigEncodeDefaults)
     }

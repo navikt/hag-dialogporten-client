@@ -22,9 +22,28 @@ fun mockDialogportenClient(
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
             )
         }
-    val mockHttpClient = HttpClient(mockEngine) { configure(1) { "" } }
+    val mockHttpClient = HttpClient(mockEngine) { configure("url", 1) { "" } }
     return mockStatic(::createHttpClient) {
-        every { createHttpClient(any(), any()) } returns mockHttpClient
+        every { createHttpClient(any(), any(), any()) } returns mockHttpClient
         DialogportenClient("url", "test_ressurs") { "" }
+    }
+}
+
+fun mockDialogportenKlient(
+    status: HttpStatusCode,
+    content: String = "",
+): DialogportenKlient {
+    val mockEngine =
+        MockEngine {
+            respond(
+                content = content,
+                status = status,
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
+            )
+        }
+    val mockHttpClient = HttpClient(mockEngine) { configure("url", 1) { "" } }
+    return mockStatic(::createHttpClient) {
+        every { createHttpClient(any(), any(), any()) } returns mockHttpClient
+        DialogportenKlient("url") { "" }
     }
 }

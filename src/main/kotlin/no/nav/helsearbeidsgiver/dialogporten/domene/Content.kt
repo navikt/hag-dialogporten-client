@@ -23,3 +23,13 @@ data class ContentValueItem(
     @Suppress("unused")
     val languageCode: String = "nb"
 }
+
+fun String.lagContentValue() =
+    ContentValue(
+        value =
+            listOf(
+                ContentValueItem(
+                    value = this,
+                ),
+            ),
+    )
