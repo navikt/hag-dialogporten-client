@@ -17,21 +17,19 @@ import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
 
-private const val ENDPOINT = "dialogporten/api/v1/serviceowner/dialogs"
-
 class DialogportenKlient(
-    val baseUrl: String,
+    baseUrl: String,
     getToken: () -> String,
 ) {
     private val httpClient = createHttpClient(1, getToken)
-
+    private val dialogportenUrl = "$baseUrl/dialogporten/api/v1/serviceowner/dialogs"
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
     suspend fun getTransmissions(dialogId: UUID): List<Transmission> =
         runCatching {
             httpClient
-                .get("$baseUrl/$ENDPOINT/$dialogId/transmissions") {
+                .get("dialogportenUrl/$dialogId/transmissions") {
                     header(HttpHeaders.ContentType, ContentType.Application.Json)
                     header(HttpHeaders.Accept, ContentType.Application.Json)
                 }.body<List<Transmission>>()
@@ -43,7 +41,7 @@ class DialogportenKlient(
         runCatching<DialogportenKlient, UUID> {
             val response =
                 httpClient
-                    .post("$baseUrl/$ENDPOINT") {
+                    .post(dialogportenUrl) {
                         header(HttpHeaders.ContentType, ContentType.Application.Json)
                         header(HttpHeaders.Accept, ContentType.Application.Json)
 
@@ -61,7 +59,7 @@ class DialogportenKlient(
         runCatching {
             val response =
                 httpClient
-                    .post("$baseUrl$ENDPOINT/$dialogId/transmissions") {
+                    .post("$dialogportenUrl/$dialogId/transmissions") {
                         header(HttpHeaders.ContentType, ContentType.Application.Json)
                         header(HttpHeaders.Accept, ContentType.Application.Json)
                         setBody(transmission)
@@ -85,7 +83,7 @@ class DialogportenKlient(
     ) {
         runCatching<DialogportenKlient, Unit> {
             httpClient
-                .patch("$baseUrl$ENDPOINT/$dialogId") {
+                .patch("$dialogportenUrl/$dialogId") {
                     header(HttpHeaders.ContentType, "application/json-patch+json")
                     setBody(patchOperations)
                 }
