@@ -16,7 +16,7 @@ class DialogportenClient(
     private val ressurs: String,
     getToken: () -> String,
 ) {
-    private val httpClient = createHttpClient(baseUrl, 1, getToken)
+    private val httpClient = createHttpClient(1, getToken)
 
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
