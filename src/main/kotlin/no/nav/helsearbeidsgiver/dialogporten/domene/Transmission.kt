@@ -4,13 +4,12 @@ package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import no.nav.helsearbeidsgiver.utils.json.serializer.LocalDateSerializer
 import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
 import java.util.UUID
 
 @Serializable
 data class Transmission(
-    val id: UUID?=null,
+    val id: UUID? = null,
     val type: TransmissionType,
     val extendedType: String,
     val sender: Sender,

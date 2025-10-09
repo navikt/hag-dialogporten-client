@@ -10,5 +10,5 @@ data class Dialog(
     val status: DialogStatus? = null,
     val content: Content,
     val transmissions: List<Transmission>,
-    val isApiOnly: Boolean?=true,
+    val isApiOnly: Boolean? = true,
 )

@@ -29,4 +29,12 @@ data class ApiAction(
         DELETE,
         PATCH,
     }
+
+    enum class Action(
+        val value: String,
+    ) {
+        READ("read"),
+        WRITE("write"),
+        DELETE("delete"),
+    }
 }

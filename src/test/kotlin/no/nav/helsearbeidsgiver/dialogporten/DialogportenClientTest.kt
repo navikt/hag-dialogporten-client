@@ -52,7 +52,7 @@ class DialogportenClientTest :
             val dialogId = UUID.randomUUID()
             val apiActions =
                 ApiAction(
-                    action = "action",
+                    action = ApiAction.Action.READ.value,
                     name = "name",
                     endpoints = emptyList(),
                 )

@@ -3,7 +3,6 @@ package no.nav.helsearbeidsgiver.dialogporten
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
-import java.util.UUID
 
 object MockData {
     val orgnr = "123456789"
