@@ -1,14 +1,21 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import no.nav.helsearbeidsgiver.utils.json.serializer.LocalDateSerializer
+import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
+import java.util.UUID
 
 @Serializable
 data class Transmission(
+    val id: UUID?=null,
     val type: TransmissionType,
-    val extendedType: ExtendedType,
+    val extendedType: String,
     val sender: Sender,
     val content: Content,
-    val attachments: List<Attachment>,
+    val attachments: List<Attachment>? = null,
 ) {
     @Serializable
     data class Sender(
@@ -28,16 +35,6 @@ data class Transmission(
 
         // Question/request for more information
         Request,
-    }
-
-    /**
-     *  Kan brukes av LPS-systemer til å gjenkjenne ulike typer vedlegg (f.eks. sykmelding, søknad om sykepenger eller forespørsel om inntektsmelding).
-     */
-    @Serializable
-    enum class ExtendedType {
-        SYKMELDING,
-        SYKEPENGESOEKNAD,
-        INNTEKTSMELDING,
     }
 
     @Serializable

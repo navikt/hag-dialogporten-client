@@ -10,7 +10,7 @@ import io.ktor.http.headersOf
 import io.mockk.every
 import no.nav.helsearbeidsgiver.utils.test.mock.mockStatic
 
-fun mockDialogportenClient(
+fun mockDialogportenKlient(
     status: HttpStatusCode,
     content: String = "",
 ): DialogportenClient {
@@ -25,25 +25,6 @@ fun mockDialogportenClient(
     val mockHttpClient = HttpClient(mockEngine) { configure(1) { "" } }
     return mockStatic(::createHttpClient) {
         every { createHttpClient(any(), any()) } returns mockHttpClient
-        DialogportenClient("url", "test_ressurs") { "" }
-    }
-}
-
-fun mockDialogportenKlient(
-    status: HttpStatusCode,
-    content: String = "",
-): DialogportenKlient {
-    val mockEngine =
-        MockEngine {
-            respond(
-                content = content,
-                status = status,
-                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
-            )
-        }
-    val mockHttpClient = HttpClient(mockEngine) { configure(1) { "" } }
-    return mockStatic(::createHttpClient) {
-        every { createHttpClient(any(), any()) } returns mockHttpClient
-        DialogportenKlient("url") { "" }
+        DialogportenClient("url") { "" }
     }
 }

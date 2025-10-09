@@ -5,31 +5,35 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Content(
     val title: ContentValue,
-    val summary: ContentValue? = null,
+    val summary: ContentValue? = null
 )
 
 @Serializable
 data class ContentValue(
     val value: List<ContentValueItem>,
+    val mediaType: String = MEDIA_TYPE
 ) {
-    @Suppress("unused")
-    val mediaType: String = "text/plain"
+    companion object {
+        const val MEDIA_TYPE: String = "text/plain"
+    }
 }
 
 @Serializable
 data class ContentValueItem(
     val value: String,
+    val languageCode: String = LANGUAGE_CODE
 ) {
-    @Suppress("unused")
-    val languageCode: String = "nb"
+    companion object {
+        const val LANGUAGE_CODE: String = "nb"
+    }
 }
 
-fun String.lagContentValue() =
+fun String.toContentValue() =
     ContentValue(
-        value =
-            listOf(
-                ContentValueItem(
-                    value = this,
-                ),
-            ),
+        value = listOf(ContentValueItem(this))
     )
+
+fun Content.Companion.create(
+    title: String,
+    summary: String?
+): Content = Content(title.toContentValue(), summary?.toContentValue())
