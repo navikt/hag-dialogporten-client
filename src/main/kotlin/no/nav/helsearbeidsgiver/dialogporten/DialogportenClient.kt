@@ -99,6 +99,6 @@ class DialogportenClient(
         logger.error(msg)
         sikkerLogger
             .error(msg, e)
-        throw e
+        throw DialogportenClientException(msg)
     }
 }

@@ -1,5 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
@@ -57,5 +58,14 @@ class DialogportenClientTest :
                     endpoints = emptyList(),
                 )
             dialogportenClient.addAction(dialogId, apiActions) shouldBe Unit
+        }
+
+        test("createDialog throws exception on error response") {
+            val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.InternalServerError, "error")
+            val request = MockData.dialogMock
+
+            shouldThrow<DialogportenClientException> {
+                dialogportenKlient.createDialog(request)
+            }
         }
     })
