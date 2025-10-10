@@ -11,22 +11,14 @@ data class Content(
 @Serializable
 data class ContentValue(
     val value: List<ContentValueItem>,
-    val mediaType: String = MEDIA_TYPE,
-) {
-    companion object {
-        const val MEDIA_TYPE: String = "text/plain"
-    }
-}
+    val mediaType: String = "text/plain",
+)
 
 @Serializable
 data class ContentValueItem(
     val value: String,
-    val languageCode: String = LANGUAGE_CODE,
-) {
-    companion object {
-        const val LANGUAGE_CODE: String = "nb"
-    }
-}
+    val languageCode: String = "nb",
+)
 
 fun String.toContentValue() =
     ContentValue(
