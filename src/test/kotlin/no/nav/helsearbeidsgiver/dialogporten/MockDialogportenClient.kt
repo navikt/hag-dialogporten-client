@@ -10,7 +10,7 @@ import io.ktor.http.headersOf
 import io.mockk.every
 import no.nav.helsearbeidsgiver.utils.test.mock.mockStatic
 
-fun mockDialogportenKlient(
+fun mockDialogportenClient(
     status: HttpStatusCode,
     content: String = "",
 ): DialogportenClient {

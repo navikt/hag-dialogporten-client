@@ -14,13 +14,13 @@ class DialogportenClientTest :
     FunSpec({
         test("Opprett dialog  gir id tilbake") {
 
-            val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.Created, MockData.gyldingRespons)
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
             val request = MockData.dialogMock
 
             dialogportenKlient.createDialog(request) shouldBe UUID.fromString(MockData.gyldingRespons)
         }
         test("addTransmission gir id tilbake") {
-            val dialogportenClient = mockDialogportenKlient(HttpStatusCode.Accepted, MockData.gyldingRespons)
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.Accepted, MockData.gyldingRespons)
             val dialogId = UUID.randomUUID()
             dialogportenClient.addTransmission(
                 dialogId,
@@ -36,7 +36,7 @@ class DialogportenClientTest :
         }
         test("getTransmissions gir liste av transmissions tilbake") {
 
-            val dialogportenClient = mockDialogportenKlient(HttpStatusCode.OK, MockData.transmissionsJson)
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.OK, MockData.transmissionsJson)
             val dialogId = UUID.randomUUID()
             val transmissions = dialogportenClient.getTransmissions(dialogId)
             transmissions.size shouldBe 1
@@ -49,7 +49,7 @@ class DialogportenClientTest :
                 .value shouldBe "title"
         }
         test("addApiActions returnerer ingenting ved sukksess") {
-            val dialogportenClient = mockDialogportenKlient(HttpStatusCode.NoContent)
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             val dialogId = UUID.randomUUID()
             val apiActions =
                 ApiAction(
@@ -61,7 +61,7 @@ class DialogportenClientTest :
         }
 
         test("createDialog kaster exception ved feil response") {
-            val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.InternalServerError, "error")
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
             val request = MockData.dialogMock
 
             shouldThrow<DialogportenClientException> {
