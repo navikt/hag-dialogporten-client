@@ -5,13 +5,12 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 
 object MockData {
-    val orgnr = "123456789"
     val ressurs = "ressursnavn"
     val dialogMock =
         Dialog(
             serviceResource = ressurs,
             party = "party",
-            externalRefererence = "external-reference",
+            externalReference = "external-reference",
             content = Content.create("title", null),
             transmissions = emptyList(),
             isApiOnly = true,

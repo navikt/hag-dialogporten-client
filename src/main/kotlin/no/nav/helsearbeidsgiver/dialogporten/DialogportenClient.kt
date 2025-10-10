@@ -29,7 +29,7 @@ class DialogportenClient(
     suspend fun getTransmissions(dialogId: UUID): List<Transmission> =
         runCatching {
             httpClient
-                .get("dialogportenUrl/$dialogId/transmissions") {
+                .get("$dialogportenUrl/$dialogId/transmissions") {
                     header(HttpHeaders.ContentType, ContentType.Application.Json)
                     header(HttpHeaders.Accept, ContentType.Application.Json)
                 }.body<List<Transmission>>()

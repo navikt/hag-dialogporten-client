@@ -60,7 +60,7 @@ class DialogportenClientTest :
             dialogportenClient.addAction(dialogId, apiActions) shouldBe Unit
         }
 
-        test("createDialog throws exception on error response") {
+        test("createDialog kaster exception ved feil response") {
             val dialogportenKlient = mockDialogportenKlient(HttpStatusCode.InternalServerError, "error")
             val request = MockData.dialogMock
 
