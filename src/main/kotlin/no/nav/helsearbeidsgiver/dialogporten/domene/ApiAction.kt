@@ -33,6 +33,5 @@ data class ApiAction(
     ) {
         READ("read"),
         WRITE("write"),
-        DELETE("delete"),
     }
 }

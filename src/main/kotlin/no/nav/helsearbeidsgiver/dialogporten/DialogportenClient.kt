@@ -1,7 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
 import io.ktor.client.call.body
-import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
@@ -109,7 +108,7 @@ private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: Creat
                 title =
                     createDialogRequest.title,
                 summary =
-                    createDialogRequest.summery,
+                    createDialogRequest.summary,
             ),
         transmissions = createDialogRequest.transmissions,
         isApiOnly = createDialogRequest.isApiOnly,

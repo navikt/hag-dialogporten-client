@@ -9,7 +9,7 @@ object MockData {
         CreateDialogRequest(
             externalReference = "external-reference",
             title = "dialog-title",
-            summery = "dialog-summery",
+            summary = "dialog-summary",
             orgnr = Orgnr.genererGyldig(),
             transmissions = emptyList(),
             isApiOnly = true,
