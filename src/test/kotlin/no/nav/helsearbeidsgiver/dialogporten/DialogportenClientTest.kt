@@ -25,7 +25,6 @@ class DialogportenClientTest :
             dialogportenClient.addTransmission(
                 dialogId,
                 Transmission(
-                    id = UUID.randomUUID(),
                     type = Transmission.TransmissionType.Information,
                     extendedType = "extendedType",
                     sender = Transmission.Sender(actorType = "actorType"),
@@ -33,20 +32,6 @@ class DialogportenClientTest :
                     attachments = emptyList(),
                 ),
             ) shouldBe UUID.fromString(MockData.gyldingRespons)
-        }
-        test("getTransmissions gir liste av transmissions tilbake") {
-
-            val dialogportenClient = mockDialogportenClient(HttpStatusCode.OK, MockData.transmissionsJson)
-            val dialogId = UUID.randomUUID()
-            val transmissions = dialogportenClient.getTransmissions(dialogId)
-            transmissions.size shouldBe 1
-            transmissions[0].id shouldBe UUID.fromString("0194cb3a-6f4e-7707-a506-a1db2b5c37fa")
-            transmissions[0].type shouldBe Transmission.TransmissionType.Information
-            transmissions[0].extendedType shouldBe "extendedType"
-            transmissions[0].sender.actorType shouldBe "actorType"
-            transmissions[0]
-                .content.title.value[0]
-                .value shouldBe "title"
         }
         test("addApiActions returnerer ingenting ved sukksess") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)

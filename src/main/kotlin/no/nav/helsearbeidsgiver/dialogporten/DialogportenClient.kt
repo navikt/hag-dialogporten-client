@@ -30,17 +30,6 @@ class DialogportenClient(
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-    suspend fun getTransmissions(dialogId: UUID): List<Transmission> =
-        runCatching {
-            httpClient
-                .get("$dialogportenUrl/$dialogId/transmissions") {
-                    header(HttpHeaders.ContentType, ContentType.Application.Json)
-                    header(HttpHeaders.Accept, ContentType.Application.Json)
-                }.body<List<Transmission>>()
-        }.getOrElse { e ->
-            logAndThrow("Feil ved kall til Dialogporten for å hente transmissions", e)
-        }
-
     suspend fun createDialog(createDialogRequest: CreateDialogRequest): UUID {
         val dialog =
             buildDialogFromRequest(createDialogRequest)
