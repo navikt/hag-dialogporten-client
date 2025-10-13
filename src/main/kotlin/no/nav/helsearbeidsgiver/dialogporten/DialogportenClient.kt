@@ -100,7 +100,7 @@ class DialogportenClient(
 
 private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: CreateDialogRequest): Dialog =
     Dialog(
-        serviceResource = ressurs,
+        serviceResource = "urn:altinn:resource:$ressurs",
         party = "urn:altinn:organization:identifier-no:${createDialogRequest.orgnr}",
         externalReference = createDialogRequest.externalReference,
         content =
