@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Serializable
 data class ApiAction(
-    val id: UUID,
+    val id: UUID? = null,
     val action: String,
     val name: String,
     val endpoints: List<Endpoint>? = null,
@@ -35,12 +35,6 @@ data class ApiAction(
     ) {
         READ("read"),
         WRITE("write"),
+        DELETE("delete"),
     }
 }
-
-@Serializable
-data class CreateApiActionRequest(
-    val action: ApiAction.Action,
-    val name: String,
-    val endpoints: List<ApiAction.Endpoint>? = null,
-)

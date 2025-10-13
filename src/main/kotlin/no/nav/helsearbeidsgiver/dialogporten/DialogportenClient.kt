@@ -9,10 +9,9 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
-import no.nav.helsearbeidsgiver.dialogporten.domene.CreateApiActionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
-import no.nav.helsearbeidsgiver.dialogporten.domene.CreateTransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
@@ -62,7 +61,7 @@ class DialogportenClient(
 
     suspend fun addTransmission(
         dialogId: UUID,
-        transmission: CreateTransmissionRequest,
+        transmission: Transmission,
     ): UUID =
         runCatching {
             val response =
@@ -80,7 +79,7 @@ class DialogportenClient(
 
     suspend fun addAction(
         dialogId: UUID,
-        apiAction: CreateApiActionRequest,
+        apiAction: ApiAction,
     ) {
         updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
     }

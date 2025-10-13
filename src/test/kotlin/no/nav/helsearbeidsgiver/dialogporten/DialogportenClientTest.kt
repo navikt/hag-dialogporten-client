@@ -6,8 +6,6 @@ import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
-import no.nav.helsearbeidsgiver.dialogporten.domene.CreateApiActionRequest
-import no.nav.helsearbeidsgiver.dialogporten.domene.CreateTransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import java.util.UUID
@@ -26,7 +24,8 @@ class DialogportenClientTest :
             val dialogId = UUID.randomUUID()
             dialogportenClient.addTransmission(
                 dialogId,
-                CreateTransmissionRequest(
+                Transmission(
+                    id = UUID.randomUUID(),
                     type = Transmission.TransmissionType.Information,
                     extendedType = "extendedType",
                     sender = Transmission.Sender(actorType = "actorType"),
@@ -53,8 +52,8 @@ class DialogportenClientTest :
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             val dialogId = UUID.randomUUID()
             val apiActions =
-                CreateApiActionRequest(
-                    action = ApiAction.Action.READ,
+                ApiAction(
+                    action = ApiAction.Action.READ.value,
                     name = "name",
                     endpoints = emptyList(),
                 )
