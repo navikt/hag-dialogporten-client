@@ -9,22 +9,8 @@ sealed class PatchOperation {
 }
 
 @Serializable
-data class AddTransmissions(
-    val value: List<Transmission>,
-    override val op: String = "add",
-    override val path: String = "/transmissions",
-) : PatchOperation()
-
-@Serializable
-data class AddStatus(
-    val value: DialogStatus,
-    override val op: String = "add",
-    override val path: String = "/status",
-) : PatchOperation()
-
-@Serializable
 data class AddApiActions(
-    val value: List<ApiAction>,
+    val value: List<CreateApiActionRequest>,
     override val op: String = "add",
     override val path: String = "/apiActions",
 ) : PatchOperation()

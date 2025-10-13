@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Serializable
 data class Transmission(
-    val id: UUID? = null,
+    val id: UUID,
     val type: TransmissionType,
     val extendedType: String,
     val sender: Sender,
@@ -55,3 +55,12 @@ data class Transmission(
         Api,
     }
 }
+
+@Serializable
+data class CreateTransmissionRequest(
+    val type: Transmission.TransmissionType,
+    val extendedType: String,
+    val sender: Transmission.Sender,
+    val content: Content,
+    val attachments: List<Transmission.Attachment>? = null,
+)
