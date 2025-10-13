@@ -15,7 +15,7 @@ class DialogportenClientTest :
         test("Opprett dialog  gir id tilbake") {
 
             val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
-            val request = MockData.dialogMock
+            val request = MockData.createDialogRequest
 
             dialogportenKlient.createDialog(request) shouldBe UUID.fromString(MockData.gyldingRespons)
         }
@@ -62,7 +62,7 @@ class DialogportenClientTest :
 
         test("createDialog kaster exception ved feil response") {
             val dialogportenKlient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
-            val request = MockData.dialogMock
+            val request = MockData.createDialogRequest
 
             shouldThrow<DialogportenClientException> {
                 dialogportenKlient.createDialog(request)

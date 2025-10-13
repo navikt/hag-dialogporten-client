@@ -1,17 +1,16 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
-import no.nav.helsearbeidsgiver.dialogporten.domene.Content
-import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
-import no.nav.helsearbeidsgiver.dialogporten.domene.create
+import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
+import no.nav.helsearbeidsgiver.utils.test.wrapper.genererGyldig
+import no.nav.helsearbeidsgiver.utils.wrapper.Orgnr
 
 object MockData {
-    val ressurs = "ressursnavn"
-    val dialogMock =
-        Dialog(
-            serviceResource = ressurs,
-            party = "party",
+    val createDialogRequest =
+        CreateDialogRequest(
             externalReference = "external-reference",
-            content = Content.create("title", null),
+            title = "dialog-title",
+            summery = "dialog-summery",
+            orgnr = Orgnr.genererGyldig(),
             transmissions = emptyList(),
             isApiOnly = true,
         )
