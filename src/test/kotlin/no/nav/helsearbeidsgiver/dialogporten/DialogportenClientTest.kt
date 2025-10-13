@@ -1,97 +1,56 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
-import io.kotest.assertions.throwables.shouldNotThrowAny
-import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
-import no.nav.helsearbeidsgiver.utils.test.resource.readResource
+import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
+import no.nav.helsearbeidsgiver.dialogporten.domene.Content
+import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
+import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import java.util.UUID
 
 class DialogportenClientTest :
     FunSpec({
-        test("Opprett dialog med sykmelding gir id tilbake") {
-            val dialogportenClient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
-            dialogportenClient
-                .opprettDialogMedSykmelding(
-                    orgnr = MockData.orgnr,
-                    dialogTittel = "testTittel",
-                    dialogSammendrag = "testSammendrag",
-                    sykmeldingId = UUID.randomUUID(),
-                    sykmeldingJsonUrl = "testurl.no",
-                ) shouldBe MockData.gyldingRespons
-        }
+        test("Opprett dialog  gir id tilbake") {
 
-        test("Oppdater dialog med søknad gir ingen respons tilbake") {
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
+            val request = MockData.createDialogRequest
+
+            dialogportenKlient.createDialog(request) shouldBe UUID.fromString(MockData.gyldingRespons)
+        }
+        test("addTransmission gir id tilbake") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.Accepted, MockData.gyldingRespons)
+            val dialogId = UUID.randomUUID()
+            dialogportenClient.addTransmission(
+                dialogId,
+                Transmission(
+                    type = Transmission.TransmissionType.Information,
+                    extendedType = "extendedType",
+                    sender = Transmission.Sender(actorType = "actorType"),
+                    content = Content.create("title", null),
+                    attachments = emptyList(),
+                ),
+            ) shouldBe UUID.fromString(MockData.gyldingRespons)
+        }
+        test("addApiActions returnerer ingenting ved sukksess") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
-            shouldNotThrowAny {
-                dialogportenClient
-                    .oppdaterDialogMedSykepengesoeknad(
-                        dialogId = UUID.randomUUID(),
-                        soeknadJsonUrl = "testurl.no",
-                    )
-            }
-        }
-
-        test("Oppdater dialog med forespørsel om inntektsmelding gir ingen respons tilbake") {
-            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
-
-            shouldNotThrowAny {
-                dialogportenClient
-                    .oppdaterDialogMedInntektsmeldingsforespoersel(
-                        dialogId = UUID.randomUUID(),
-                        forespoerselUrl = "testurl.no",
-                        forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
-                    )
-            }
-        }
-
-        test("Oppretting av dialog med sykmelding kaster feil videre ved 400-feil fra Dialogporten") {
-            val dialogportenClient =
-                mockDialogportenClient(
-                    HttpStatusCode.BadRequest,
-                    "dialog-response/validation-error.json".readResource(),
+            val dialogId = UUID.randomUUID()
+            val apiActions =
+                ApiAction(
+                    action = ApiAction.Action.READ.value,
+                    name = "name",
+                    endpoints = emptyList(),
                 )
-            shouldThrowExactly<DialogportenClientException> {
-                dialogportenClient
-                    .opprettDialogMedSykmelding(
-                        orgnr = MockData.orgnr,
-                        dialogTittel = "testTittel",
-                        dialogSammendrag = "testSammendrag",
-                        sykmeldingId = UUID.randomUUID(),
-                        sykmeldingJsonUrl = "testurl.no",
-                    )
-            }
+            dialogportenClient.addAction(dialogId, apiActions) shouldBe Unit
         }
 
-        test("Oppdatering av dialog med søknad kaster feil videre ved 400-feil fra Dialogporten") {
-            val dialogportenClient =
-                mockDialogportenClient(
-                    HttpStatusCode.BadRequest,
-                    "dialog-response/validation-error.json".readResource(),
-                )
-            shouldThrowExactly<DialogportenClientException> {
-                dialogportenClient
-                    .oppdaterDialogMedSykepengesoeknad(
-                        dialogId = UUID.randomUUID(),
-                        soeknadJsonUrl = "testurl.no",
-                    )
-            }
-        }
+        test("createDialog kaster exception ved feil response") {
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
+            val request = MockData.createDialogRequest
 
-        test("Oppdatering av dialog med forespørsel om inntektsmelding kaster feil videre ved 400-feil fra Dialogporten") {
-            val dialogportenClient =
-                mockDialogportenClient(
-                    HttpStatusCode.BadRequest,
-                    "dialog-response/validation-error.json".readResource(),
-                )
-            shouldThrowExactly<DialogportenClientException> {
-                dialogportenClient
-                    .oppdaterDialogMedInntektsmeldingsforespoersel(
-                        dialogId = UUID.randomUUID(),
-                        forespoerselUrl = "testurl.no",
-                        forespoerselDokumentasjonUrl = "testdokumentasjonurl.no",
-                    )
+            shouldThrow<DialogportenClientException> {
+                dialogportenKlient.createDialog(request)
             }
         }
     })

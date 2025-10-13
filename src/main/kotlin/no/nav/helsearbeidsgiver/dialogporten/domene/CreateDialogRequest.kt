@@ -1,14 +1,12 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
-import kotlinx.serialization.Serializable
+import no.nav.helsearbeidsgiver.utils.wrapper.Orgnr
 
-@Serializable
 data class CreateDialogRequest(
-    val serviceResource: String,
-    val party: String,
-    val externalRefererence: String,
-    val status: DialogStatus,
-    val content: Content,
+    val orgnr: Orgnr,
+    val title: String,
+    val summary: String,
+    val externalReference: String,
+    val isApiOnly: Boolean = true,
     val transmissions: List<Transmission>,
-    val isApiOnly: Boolean?,
 )

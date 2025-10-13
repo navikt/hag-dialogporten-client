@@ -1,31 +1,44 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
-import java.util.UUID
+import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
+import no.nav.helsearbeidsgiver.utils.test.wrapper.genererGyldig
+import no.nav.helsearbeidsgiver.utils.wrapper.Orgnr
 
 object MockData {
-    val orgnr = "123456789"
-    val ressurs = "ressursnavn"
-    val dialogRequest =
-        opprettDialogMedSykmeldingRequest(
-            ressurs = ressurs,
-            orgnr = orgnr,
-            dialogTittel = "testtittel",
-            dialogSammendrag = "testdialogsammendrag",
-            sykmeldingId = UUID.randomUUID(),
-            sykmeldingJsonUrl = "test-sykmelding-url.no",
+    val createDialogRequest =
+        CreateDialogRequest(
+            externalReference = "external-reference",
+            title = "dialog-title",
+            summary = "dialog-summary",
+            orgnr = Orgnr.genererGyldig(),
+            transmissions = emptyList(),
+            isApiOnly = true,
         )
-    val gyldingRespons = "0194cb3a-6f4e-7707-a506-a1db2b5c37fa"
-}
 
-object MockDataUtenSammendrag {
-    val orgnr = "123456789"
-    val ressurs = "ressursnavn"
-    val dialogRequestUtenSammendrag =
-        opprettDialogMedSykmeldingRequest(
-            ressurs = ressurs,
-            orgnr = orgnr,
-            dialogTittel = "testtittel",
-            sykmeldingId = UUID.randomUUID(),
-            sykmeldingJsonUrl = "test-sykmelding-url.no",
-        )
+    val gyldingRespons = "0194cb3a-6f4e-7707-a506-a1db2b5c37fa"
+
+    val transmissionsJson =
+        """
+        [
+               {
+                   "id": "0194cb3a-6f4e-7707-a506-a1db2b5c37fa",
+                   "type": "Information",
+                   "extendedType": "extendedType",
+                   "sender": {
+                       "actorType": "actorType"
+                   },
+                   "content": {
+                       "title": {
+                           "value": [
+                               {
+                                   "value": "title",
+                                   "languageCode": "nb"
+                               }
+                           ],
+                           "mediaType": "text/plain"
+                       }
+                   }
+               }
+           ]
+        """.trimIndent()
 }

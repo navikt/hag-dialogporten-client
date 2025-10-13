@@ -25,6 +25,7 @@ internal fun HttpClientConfig<*>.configure(
     getToken: () -> String,
 ) {
     expectSuccess = true
+
     install(ContentNegotiation) {
         json(jsonConfigEncodeDefaults)
     }

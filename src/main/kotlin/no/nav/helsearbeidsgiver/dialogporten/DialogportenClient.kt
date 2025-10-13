@@ -5,100 +5,111 @@ import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
+import no.nav.helsearbeidsgiver.dialogporten.domene.Content
+import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
+import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
+import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
+import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
+import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
 
 class DialogportenClient(
-    private val baseUrl: String,
-    private val ressurs: String,
+    baseUrl: String,
     getToken: () -> String,
+    val ressurs: String,
 ) {
     private val httpClient = createHttpClient(1, getToken)
-
+    private val dialogportenUrl = "$baseUrl/dialogporten/api/v1/serviceowner/dialogs"
     private val logger = this.logger()
     private val sikkerLogger = sikkerLogger()
 
-    suspend fun opprettDialogMedSykmelding(
-        orgnr: String,
-        dialogTittel: String,
-        dialogSammendrag: String? = null,
-        sykmeldingId: UUID,
-        sykmeldingJsonUrl: String,
-        kunForApi: Boolean = true,
-    ): String {
-        val dialogRequest =
-            opprettDialogMedSykmeldingRequest(
-                ressurs = ressurs,
-                orgnr = orgnr,
-                dialogTittel = dialogTittel,
-                dialogSammendrag = dialogSammendrag,
-                sykmeldingId = sykmeldingId,
-                sykmeldingJsonUrl = sykmeldingJsonUrl,
-                kunForApi = kunForApi,
-            )
-        return runCatching<DialogportenClient, String> {
-            httpClient
-                .post("$baseUrl/dialogporten/api/v1/serviceowner/dialogs") {
-                    header("Content-Type", "application/json")
-                    header("Accept", "application/json")
-                    setBody(dialogRequest)
-                }.body()
+    suspend fun createDialog(createDialogRequest: CreateDialogRequest): UUID {
+        val dialog =
+            buildDialogFromRequest(createDialogRequest)
+        return runCatching<DialogportenClient, UUID> {
+            val response =
+                httpClient
+                    .post(dialogportenUrl) {
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                        header(HttpHeaders.Accept, ContentType.Application.Json)
+
+                        setBody(dialog)
+                    }.body<String>()
+            UUID.fromString(response.removeSurrounding("\""))
         }.getOrElse { e ->
-            "Feil ved kall til Dialogporten for å opprette dialog med sykemelding".also {
-                logger.error(it)
-                sikkerLogger.error(it, e)
-                throw DialogportenClientException(it)
-            }
+            logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
     }
 
-    suspend fun oppdaterDialogMedSykepengesoeknad(
+    suspend fun addTransmission(
         dialogId: UUID,
-        soeknadJsonUrl: String,
-    ) {
-        val dialogPatchRequest = oppdaterDialogMedSykepengesoeknadRequest(soeknadJsonUrl = soeknadJsonUrl)
+        transmission: Transmission,
+    ): UUID =
         runCatching {
+            val response =
+                httpClient
+                    .post("$dialogportenUrl/$dialogId/transmissions") {
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                        header(HttpHeaders.Accept, ContentType.Application.Json)
+                        setBody(transmission)
+                    }.body<String>()
+
+            UUID.fromString(response.removeSurrounding("\""))
+        }.getOrElse { e ->
+            logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
+        }
+
+    suspend fun addAction(
+        dialogId: UUID,
+        apiAction: ApiAction,
+    ) {
+        updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+    }
+
+    private suspend fun updateDialog(
+        dialogId: UUID,
+        patchOperations: List<PatchOperation>,
+    ) {
+        runCatching<DialogportenClient, Unit> {
             httpClient
-                .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
-                    header("Content-Type", "application/json-patch+json")
-                    setBody(dialogPatchRequest)
+                .patch("$dialogportenUrl/$dialogId") {
+                    header(HttpHeaders.ContentType, "application/json-patch+json")
+                    setBody(patchOperations)
                 }
         }.getOrElse { e ->
-            "Feil ved kall til Dialogporten for å oppdatere dialog med sykepengesøknad".also {
-                logger.error(it)
-                sikkerLogger.error(it, e)
-                throw DialogportenClientException(it)
-            }
+            logAndThrow("Feil ved kall til Dialogporten for å oppdatere dialog", e)
         }
     }
 
-    suspend fun oppdaterDialogMedInntektsmeldingsforespoersel(
-        dialogId: UUID,
-        forespoerselUrl: String,
-        forespoerselDokumentasjonUrl: String,
-    ) {
-        val dialogPatchRequest =
-            oppdaterDialogMedInntektsmeldingsforespoerselRequest(
-                forespoerselUrl = forespoerselUrl,
-                forespoerselDokumentasjonUrl = forespoerselDokumentasjonUrl,
-            )
-        runCatching {
-            httpClient
-                .patch("$baseUrl/dialogporten/api/v1/serviceowner/dialogs/$dialogId") {
-                    header("Content-Type", "application/json-patch+json")
-                    setBody(dialogPatchRequest)
-                }
-        }.getOrElse { e ->
-            "Feil ved kall til Dialogporten for å oppdatere dialog med forespørsel om inntektsmelding".also {
-                logger.error(it)
-                sikkerLogger.error(it, e)
-                throw DialogportenClientException(it)
-            }
-        }
+    private fun logAndThrow(
+        msg: String,
+        e: Throwable,
+    ): Nothing {
+        logger.error(msg)
+        sikkerLogger
+            .error(msg, e)
+        throw DialogportenClientException(msg)
     }
 }
 
-class DialogportenClientException(
-    message: String,
-) : Exception(message)
+private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: CreateDialogRequest): Dialog =
+    Dialog(
+        serviceResource = "urn:altinn:resource:$ressurs",
+        party = "urn:altinn:organization:identifier-no:${createDialogRequest.orgnr}",
+        externalReference = createDialogRequest.externalReference,
+        content =
+            Content.create(
+                title =
+                    createDialogRequest.title,
+                summary =
+                    createDialogRequest.summary,
+            ),
+        transmissions = createDialogRequest.transmissions,
+        isApiOnly = createDialogRequest.isApiOnly,
+    )

@@ -11,15 +11,21 @@ data class Content(
 @Serializable
 data class ContentValue(
     val value: List<ContentValueItem>,
-) {
-    @Suppress("unused")
-    val mediaType: String = "text/plain"
-}
+    val mediaType: String = "text/plain",
+)
 
 @Serializable
 data class ContentValueItem(
     val value: String,
-) {
-    @Suppress("unused")
-    val languageCode: String = "nb"
-}
+    val languageCode: String = "nb",
+)
+
+fun String.toContentValue() =
+    ContentValue(
+        value = listOf(ContentValueItem(this)),
+    )
+
+fun Content.Companion.create(
+    title: String,
+    summary: String?,
+): Content = Content(title.toContentValue(), summary?.toContentValue())

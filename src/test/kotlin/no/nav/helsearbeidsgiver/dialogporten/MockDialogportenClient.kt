@@ -25,6 +25,6 @@ fun mockDialogportenClient(
     val mockHttpClient = HttpClient(mockEngine) { configure(1) { "" } }
     return mockStatic(::createHttpClient) {
         every { createHttpClient(any(), any()) } returns mockHttpClient
-        DialogportenClient("url", "test_ressurs") { "" }
+        DialogportenClient(baseUrl = "url", ressurs = "ressurs", getToken = { "" })
     }
 }
