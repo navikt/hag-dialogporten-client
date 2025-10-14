@@ -54,8 +54,8 @@ data class Transmission(
     }
 }
 
-fun createTransmissionWithAttachment(
-    transmissionTitel: String,
+fun lagTransmissionMedVedlegg(
+    transmissionTittel: String,
     transmissionSammendrag: String? = null,
     extendedType: String,
     vedleggNavn: String,
@@ -70,7 +70,7 @@ fun createTransmissionWithAttachment(
         sender = Transmission.Sender("ServiceOwner"),
         content =
             Content.create(
-                title = transmissionTitel,
+                title = transmissionTittel,
                 summary = transmissionSammendrag,
             ),
         attachments =
