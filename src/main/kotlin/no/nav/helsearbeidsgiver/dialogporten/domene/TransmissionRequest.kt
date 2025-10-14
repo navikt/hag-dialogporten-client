@@ -2,7 +2,7 @@ package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import io.ktor.http.ContentType
 
-sealed class TransmissionRequest {
+abstract class TransmissionRequest {
     val vedleggMediaType = ContentType.Application.Json.toString()
     val vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api
     abstract val extendedType: String
