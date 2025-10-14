@@ -53,3 +53,38 @@ data class Transmission(
         Api,
     }
 }
+
+fun createTransmissionWithAttachment(
+    transmissionTitel: String,
+    transmissionSammendrag: String? = null,
+    extendedType: String,
+    vedleggNavn: String,
+    vedleggUrl: String,
+    vedleggMediaType: String,
+    vedleggConsumerType: Transmission.AttachmentUrlConsumerType,
+    type: Transmission.TransmissionType,
+): Transmission =
+    Transmission(
+        type = type,
+        extendedType = extendedType.toString(),
+        sender = Transmission.Sender("ServiceOwner"),
+        content =
+            Content.create(
+                title = transmissionTitel,
+                summary = transmissionSammendrag,
+            ),
+        attachments =
+            listOf(
+                Transmission.Attachment(
+                    displayName = listOf(ContentValueItem(vedleggNavn)),
+                    urls =
+                        listOf(
+                            Transmission.Url(
+                                url = vedleggUrl,
+                                mediaType = vedleggMediaType,
+                                consumerType = vedleggConsumerType,
+                            ),
+                        ),
+                ),
+            ),
+    )
