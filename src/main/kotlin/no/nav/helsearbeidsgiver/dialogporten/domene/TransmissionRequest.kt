@@ -1,0 +1,40 @@
+package no.nav.helsearbeidsgiver.dialogporten.domene
+
+import io.ktor.http.ContentType
+
+abstract class TransmissionRequest {
+    val vedleggMediaType = ContentType.Application.Json.toString()
+    val vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api
+    abstract val extendedType: String
+    abstract val tittel: String
+    abstract val sammendrag: String?
+    abstract val vedleggNavn: String
+    abstract val vedleggUrl: String
+    abstract val type: Transmission.TransmissionType
+}
+
+fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmission =
+    Transmission(
+        type = transmissionRequest.type,
+        extendedType = transmissionRequest.extendedType,
+        sender = Transmission.Sender("ServiceOwner"),
+        content =
+            Content.create(
+                title = transmissionRequest.tittel,
+                summary = transmissionRequest.sammendrag,
+            ),
+        attachments =
+            listOf(
+                Transmission.Attachment(
+                    displayName = listOf(ContentValueItem(transmissionRequest.vedleggNavn)),
+                    urls =
+                        listOf(
+                            Transmission.Url(
+                                url = transmissionRequest.vedleggUrl,
+                                mediaType = transmissionRequest.vedleggMediaType,
+                                consumerType = transmissionRequest.vedleggConsumerType,
+                            ),
+                        ),
+                ),
+            ),
+    )
