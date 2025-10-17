@@ -5,6 +5,7 @@ package no.nav.helsearbeidsgiver.dialogporten.domene
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
+import java.util.UUID
 
 @Serializable
 data class Transmission(
@@ -12,6 +13,7 @@ data class Transmission(
     val extendedType: String,
     val sender: Sender,
     val content: Content,
+    val relatedTransmissionId: UUID? = null,
     val attachments: List<Attachment>? = null,
 ) {
     @Serializable

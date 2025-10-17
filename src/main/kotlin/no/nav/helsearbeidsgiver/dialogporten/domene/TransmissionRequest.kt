@@ -1,6 +1,7 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import io.ktor.http.ContentType
+import java.util.UUID
 
 abstract class TransmissionRequest {
     val vedleggMediaType = ContentType.Application.Json.toString()
@@ -11,6 +12,7 @@ abstract class TransmissionRequest {
     abstract val vedleggNavn: String
     abstract val vedleggUrl: String
     abstract val type: Transmission.TransmissionType
+    abstract val relatedTransmissionId: UUID?
 }
 
 fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmission =
@@ -18,6 +20,7 @@ fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmi
         type = transmissionRequest.type,
         extendedType = transmissionRequest.extendedType,
         sender = Transmission.Sender("ServiceOwner"),
+        relatedTransmissionId = transmissionRequest.relatedTransmissionId,
         content =
             Content.create(
                 title = transmissionRequest.tittel,
