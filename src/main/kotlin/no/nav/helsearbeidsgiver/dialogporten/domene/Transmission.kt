@@ -34,6 +34,18 @@ data class Transmission(
 
         // Question/request for more information
         Request,
+
+        // Notification of important events
+        Alert,
+
+        // Formal decision related to a previous submission
+        Decision,
+
+        // Submission of data, e.g., a form submission
+        Submission,
+
+        // Update to previously submitted data
+        Correction,
     }
 
     @Serializable
