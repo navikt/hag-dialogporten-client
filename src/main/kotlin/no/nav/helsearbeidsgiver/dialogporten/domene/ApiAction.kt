@@ -27,11 +27,19 @@ data class ApiAction(
         DELETE,
         PATCH,
     }
-
-    enum class Action(
-        val value: String,
-    ) {
-        READ("read"),
-        WRITE("write"),
-    }
 }
+
+enum class Action(
+    val value: String,
+) {
+    READ("read"),
+    WRITE("write"),
+}
+
+@Serializable
+data class GuiAction(
+    val action: String,
+    val name: String,
+    val url: String,
+    val title: ContentValueItem,
+)
