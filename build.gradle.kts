@@ -7,7 +7,7 @@ plugins {
     id("maven-publish")
 }
 group = "no.nav.helsearbeidsgiver"
-version = "2.2.4"
+version = "2.2.5.1-SNAPSHOT"
 
 kotlin {
     compilerOptions {
