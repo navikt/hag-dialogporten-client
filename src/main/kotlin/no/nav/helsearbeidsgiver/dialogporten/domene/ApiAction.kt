@@ -41,5 +41,12 @@ data class GuiAction(
     val action: String,
     val name: String,
     val url: String,
-    val title: ContentValueItem,
-)
+    val title: List<ContentValueItem>,
+    val priority: Priority,
+) {
+    enum class Priority {
+        Primary,
+        Secondary,
+        Tertiary,
+    }
+}
