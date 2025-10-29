@@ -7,6 +7,7 @@ abstract class TransmissionRequest {
     val vedleggMediaType = ContentType.Application.Json.toString()
     val vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api
     abstract val extendedType: String
+    abstract val externalReference: String?
     abstract val tittel: String
     abstract val sammendrag: String?
     abstract val vedleggNavn: String
@@ -19,6 +20,7 @@ fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmi
     Transmission(
         type = transmissionRequest.type,
         extendedType = transmissionRequest.extendedType,
+        externalReference = transmissionRequest.externalReference,
         sender = Transmission.Sender("ServiceOwner"),
         relatedTransmissionId = transmissionRequest.relatedTransmissionId,
         content =
