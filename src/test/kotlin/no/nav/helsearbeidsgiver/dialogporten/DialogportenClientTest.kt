@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
+import no.nav.helsearbeidsgiver.dialogporten.domene.Action
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
@@ -38,11 +39,11 @@ class DialogportenClientTest :
             val dialogId = UUID.randomUUID()
             val apiActions =
                 ApiAction(
-                    action = ApiAction.Action.READ.value,
+                    action = Action.READ.value,
                     name = "name",
                     endpoints = emptyList(),
                 )
-            dialogportenClient.addAction(dialogId, apiActions) shouldBe Unit
+            dialogportenClient.addAction(dialogId, apiActions, null) shouldBe Unit
         }
 
         test("createDialog kaster exception ved feil response") {
