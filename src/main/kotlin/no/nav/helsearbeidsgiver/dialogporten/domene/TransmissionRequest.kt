@@ -45,7 +45,7 @@ fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmi
                     urls =
                         listOf(
                             Transmission.Url(
-                                url = transmissionRequest.vedleggUrl,
+                                url = transmissionRequest.vedleggBaseUrl,
                                 mediaType = transmissionRequest.vedleggMediaType,
                                 consumerType = Transmission.AttachmentUrlConsumerType.Gui,
                             ),
