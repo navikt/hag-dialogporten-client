@@ -28,7 +28,6 @@ class DialogportenClientTest :
                 Transmission(
                     type = Transmission.TransmissionType.Information,
                     extendedType = "extendedType",
-                    externalReference = "externalReference",
                     sender = Transmission.Sender(actorType = "actorType"),
                     content = Content.create("title", null),
                     attachments = emptyList(),

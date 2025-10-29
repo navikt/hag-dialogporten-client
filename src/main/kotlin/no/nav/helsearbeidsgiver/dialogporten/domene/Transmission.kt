@@ -11,7 +11,6 @@ import java.util.UUID
 data class Transmission(
     val type: TransmissionType,
     val extendedType: String,
-    val externalReference: String?,
     val sender: Sender,
     val content: Content,
     val relatedTransmissionId: UUID? = null,
