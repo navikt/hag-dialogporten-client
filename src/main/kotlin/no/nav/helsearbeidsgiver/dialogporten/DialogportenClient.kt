@@ -73,9 +73,10 @@ class DialogportenClient(
         guiActions: GuiAction?,
     ) {
         if (guiActions == null) {
-            return updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+        } else {
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions))))
         }
-        updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions))))
     }
 
     private suspend fun updateDialog(
