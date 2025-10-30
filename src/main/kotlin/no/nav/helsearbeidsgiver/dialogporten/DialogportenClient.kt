@@ -8,10 +8,12 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
+import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -68,8 +70,13 @@ class DialogportenClient(
     suspend fun addAction(
         dialogId: UUID,
         apiAction: ApiAction,
+        guiActions: GuiAction?,
     ) {
-        updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+        if (guiActions == null) {
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+        } else {
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions))))
+        }
     }
 
     private suspend fun updateDialog(

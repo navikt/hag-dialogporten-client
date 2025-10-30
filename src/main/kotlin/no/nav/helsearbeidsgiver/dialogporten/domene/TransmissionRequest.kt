@@ -5,7 +5,6 @@ import java.util.UUID
 
 abstract class TransmissionRequest {
     val vedleggMediaType = ContentType.Application.Json.toString()
-    val vedleggConsumerType = Transmission.AttachmentUrlConsumerType.Api
     abstract val extendedType: String
     abstract val dokumentId: UUID
     abstract val tittel: String
@@ -37,7 +36,18 @@ fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmi
                             Transmission.Url(
                                 url = "${transmissionRequest.vedleggBaseUrl}/${transmissionRequest.dokumentId}",
                                 mediaType = transmissionRequest.vedleggMediaType,
-                                consumerType = transmissionRequest.vedleggConsumerType,
+                                consumerType = Transmission.AttachmentUrlConsumerType.Api,
+                            ),
+                        ),
+                ),
+                Transmission.Attachment(
+                    displayName = listOf(ContentValueItem(transmissionRequest.vedleggNavn)),
+                    urls =
+                        listOf(
+                            Transmission.Url(
+                                url = transmissionRequest.vedleggBaseUrl,
+                                mediaType = transmissionRequest.vedleggMediaType,
+                                consumerType = Transmission.AttachmentUrlConsumerType.Gui,
                             ),
                         ),
                 ),

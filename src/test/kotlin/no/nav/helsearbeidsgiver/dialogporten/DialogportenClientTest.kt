@@ -4,8 +4,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
+import no.nav.helsearbeidsgiver.dialogporten.domene.Action
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
+import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import java.util.UUID
@@ -39,13 +41,32 @@ class DialogportenClientTest :
             val dialogId = UUID.randomUUID()
             val apiActions =
                 ApiAction(
-                    action = ApiAction.Action.READ.value,
+                    action = Action.READ.value,
                     name = "name",
                     endpoints = emptyList(),
                 )
-            dialogportenClient.addAction(dialogId, apiActions) shouldBe Unit
+            dialogportenClient.addAction(dialogId, apiActions, null) shouldBe Unit
         }
 
+        test("addApiAction and guiActions returnerer ingenting ved sukksess") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
+            val dialogId = UUID.randomUUID()
+            val apiActions =
+                ApiAction(
+                    action = Action.READ.value,
+                    name = "name",
+                    endpoints = emptyList(),
+                )
+            val guiActions =
+                GuiAction(
+                    action = Action.READ.value,
+                    name = "name",
+                    url = "url",
+                    title = listOf(),
+                    priority = GuiAction.Priority.Primary,
+                )
+            dialogportenClient.addAction(dialogId, apiActions, guiActions) shouldBe Unit
+        }
         test("createDialog kaster exception ved feil response") {
             val dialogportenKlient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
             val request = MockData.createDialogRequest

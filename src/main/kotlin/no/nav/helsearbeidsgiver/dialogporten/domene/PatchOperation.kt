@@ -28,3 +28,10 @@ data class AddApiActions(
     override val op: String = "add",
     override val path: String = "/apiActions",
 ) : PatchOperation()
+
+@Serializable
+data class AddGuiActions(
+    val value: List<GuiAction>,
+    override val op: String = "add",
+    override val path: String = "/guiActions",
+) : PatchOperation()
