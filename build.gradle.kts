@@ -6,8 +6,6 @@ plugins {
     id("org.jmailen.kotlinter")
     id("maven-publish")
 }
-group = "no.nav.helsearbeidsgiver"
-version = "2.3.1"
 
 kotlin {
     compilerOptions {
@@ -18,10 +16,6 @@ kotlin {
 repositories {
     mavenCentral()
     mavenNav("*")
-}
-
-tasks.register("printVersion") {
-    println(project.version)
 }
 
 publishing {

@@ -110,6 +110,7 @@ private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: Creat
         serviceResource = "urn:altinn:resource:$ressurs",
         party = "urn:altinn:organization:identifier-no:${createDialogRequest.orgnr}",
         externalReference = createDialogRequest.externalReference,
+        idempotentKey = createDialogRequest.idempotentKey,
         content =
             Content.create(
                 title =
