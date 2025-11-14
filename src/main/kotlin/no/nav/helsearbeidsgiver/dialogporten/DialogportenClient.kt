@@ -18,6 +18,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
 import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -106,7 +107,7 @@ class DialogportenClient(
             listOf(
                 AddTransmissions(transmissions),
                 RemoveGuiActions(),
-                RemoveGuiActions(),
+                RemoveApiAction(),
             ),
         )
     }
