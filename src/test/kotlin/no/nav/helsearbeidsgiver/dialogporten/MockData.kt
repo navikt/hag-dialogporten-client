@@ -8,6 +8,7 @@ object MockData {
     val createDialogRequest =
         CreateDialogRequest(
             externalReference = "external-reference",
+            idempotentKey = "idempotent-key",
             title = "dialog-title",
             summary = "dialog-summary",
             orgnr = Orgnr.genererGyldig(),
