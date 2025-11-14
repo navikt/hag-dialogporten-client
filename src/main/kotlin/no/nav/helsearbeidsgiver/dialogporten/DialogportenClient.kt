@@ -9,12 +9,16 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
+import no.nav.helsearbeidsgiver.dialogporten.domene.AddTransmissions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
+import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.utils.log.logger
@@ -66,6 +70,46 @@ class DialogportenClient(
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
         }
+
+    suspend fun addTransmissionsWithStatusRequiresAttention(
+        dialogId: UUID,
+        transmissions: List<Transmission>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                AddTransmissions(transmissions),
+                AddStatus(DialogStatus.RequiresAttention),
+            ),
+        )
+    }
+
+    suspend fun addTransmissionsWithStatusCompleted(
+        dialogId: UUID,
+        transmissions: List<Transmission>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                AddTransmissions(transmissions),
+                AddStatus(DialogStatus.Completed),
+            ),
+        )
+    }
+
+    suspend fun addTransmissionsWithRemoveActions(
+        dialogId: UUID,
+        transmissions: List<Transmission>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                AddTransmissions(transmissions),
+                RemoveGuiActions(),
+                RemoveGuiActions(),
+            ),
+        )
+    }
 
     suspend fun addAction(
         dialogId: UUID,

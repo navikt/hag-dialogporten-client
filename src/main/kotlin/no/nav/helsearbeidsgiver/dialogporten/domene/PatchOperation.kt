@@ -35,3 +35,15 @@ data class AddGuiActions(
     override val op: String = "add",
     override val path: String = "/guiActions",
 ) : PatchOperation()
+
+@Serializable
+data class RemoveApiAction(
+    override val op: String = "remove",
+    override val path: String = "/apiActions",
+) : PatchOperation()
+
+@Serializable
+data class RemoveGuiActions(
+    override val op: String = "remove",
+    override val path: String = "/guiActions",
+) : PatchOperation()
