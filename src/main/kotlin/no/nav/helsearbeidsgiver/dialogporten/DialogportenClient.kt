@@ -72,28 +72,14 @@ class DialogportenClient(
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
         }
 
-    suspend fun addTransmissionsWithStatusRequiresAttention(
+    suspend fun setDialogStatus(
         dialogId: UUID,
-        transmissions: List<Transmission>,
+        dialogStatus: DialogStatus,
     ) {
         updateDialog(
             dialogId,
             listOf(
-                AddTransmissions(transmissions),
-                AddStatus(DialogStatus.RequiresAttention),
-            ),
-        )
-    }
-
-    suspend fun addTransmissionsWithStatusCompleted(
-        dialogId: UUID,
-        transmissions: List<Transmission>,
-    ) {
-        updateDialog(
-            dialogId,
-            listOf(
-                AddTransmissions(transmissions),
-                AddStatus(DialogStatus.Completed),
+                AddStatus(dialogStatus),
             ),
         )
     }
