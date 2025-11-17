@@ -23,6 +23,12 @@ data class AddStatus(
 ) : PatchOperation()
 
 @Serializable
+data class RemoveStatus(
+    override val op: String = "remove",
+    override val path: String = "/status",
+) : PatchOperation()
+
+@Serializable
 data class AddApiActions(
     val value: List<ApiAction>,
     override val op: String = "add",

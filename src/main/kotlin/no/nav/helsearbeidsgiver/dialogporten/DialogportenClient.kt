@@ -20,6 +20,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.utils.log.logger
@@ -94,6 +95,7 @@ class DialogportenClient(
                 AddTransmissions(transmissions),
                 RemoveGuiActions(),
                 RemoveApiAction(),
+                RemoveStatus(),
             ),
         )
     }
@@ -106,7 +108,10 @@ class DialogportenClient(
         if (guiActions == null) {
             updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
         } else {
-            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions))))
+            updateDialog(
+                dialogId,
+                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions)), AddStatus(DialogStatus.RequiresAttention)),
+            )
         }
     }
 
