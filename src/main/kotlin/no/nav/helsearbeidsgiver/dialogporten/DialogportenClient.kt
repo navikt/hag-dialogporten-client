@@ -85,14 +85,10 @@ class DialogportenClient(
         )
     }
 
-    suspend fun addTransmissionsWithRemoveActions(
-        dialogId: UUID,
-        transmissions: List<Transmission>,
-    ) {
+    suspend fun removeActionsAndStatus(dialogId: UUID) {
         updateDialog(
             dialogId,
             listOf(
-                AddTransmissions(transmissions),
                 RemoveGuiActions(),
                 RemoveApiAction(),
                 RemoveStatus(),
