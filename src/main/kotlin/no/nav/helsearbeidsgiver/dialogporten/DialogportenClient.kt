@@ -10,7 +10,6 @@ import io.ktor.http.HttpHeaders
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
-import no.nav.helsearbeidsgiver.dialogporten.domene.AddTransmissions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
