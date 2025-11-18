@@ -19,7 +19,6 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
-import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.utils.log.logger
