@@ -90,7 +90,7 @@ class DialogportenClient(
             listOf(
                 RemoveGuiActions(),
                 RemoveApiAction(),
-                RemoveStatus(),
+                AddStatus(DialogStatus.NotApplicable),
             ),
         )
     }
