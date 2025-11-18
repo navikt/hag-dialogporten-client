@@ -100,7 +100,7 @@ class DialogportenClient(
         guiActions: GuiAction?,
     ) {
         if (guiActions == null) {
-            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddStatus(DialogStatus.RequiresAttention)))
         } else {
             updateDialog(
                 dialogId,
