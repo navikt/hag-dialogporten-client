@@ -9,12 +9,16 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
+import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.utils.log.logger
@@ -67,15 +71,41 @@ class DialogportenClient(
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
         }
 
+    suspend fun setDialogStatus(
+        dialogId: UUID,
+        dialogStatus: DialogStatus,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                AddStatus(dialogStatus),
+            ),
+        )
+    }
+
+    suspend fun removeActionsAndStatus(dialogId: UUID) {
+        updateDialog(
+            dialogId,
+            listOf(
+                RemoveGuiActions(),
+                RemoveApiAction(),
+                AddStatus(DialogStatus.NotApplicable),
+            ),
+        )
+    }
+
     suspend fun addAction(
         dialogId: UUID,
         apiAction: ApiAction,
         guiActions: GuiAction?,
     ) {
         if (guiActions == null) {
-            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction))))
+            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddStatus(DialogStatus.RequiresAttention)))
         } else {
-            updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions))))
+            updateDialog(
+                dialogId,
+                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions)), AddStatus(DialogStatus.RequiresAttention)),
+            )
         }
     }
 
