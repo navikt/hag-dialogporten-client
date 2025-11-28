@@ -2,6 +2,7 @@
 
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
+import io.ktor.http.Url
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import no.nav.helsearbeidsgiver.utils.json.serializer.UuidSerializer
@@ -48,23 +49,6 @@ data class Transmission(
         // Update to previously submitted data
         Correction,
     }
-
-    @Serializable
-    data class Attachment(
-        val displayName: List<ContentValueItem>,
-        val urls: List<Url>,
-    )
-
-    @Serializable
-    data class Url(
-        val url: String,
-        val mediaType: String,
-        val consumerType: AttachmentUrlConsumerType,
-    )
-
-    @Serializable
-    enum class AttachmentUrlConsumerType {
-        Gui,
-        Api,
-    }
 }
+
+fun Transmission.addAttachment(attachment: Attachment): Transmission = copy(attachments = (attachments.orEmpty() + attachment))
