@@ -9,80 +9,20 @@ abstract class TransmissionRequest {
     abstract val dokumentId: UUID
     abstract val tittel: String
     abstract val sammendrag: String?
-    abstract val vedleggNavn: String
-    abstract val vedleggApiBaseUrl: String
-    abstract val vadleggGuiBaseUrl: String
     abstract val type: Transmission.TransmissionType
     abstract val relatedTransmissionId: UUID?
 }
 
-fun lagTransmissionMedVedlegg(transmissionRequest: TransmissionRequest): Transmission =
+fun TransmissionRequest.toTransmission(): Transmission =
     Transmission(
-        type = transmissionRequest.type,
-        extendedType = transmissionRequest.extendedType,
-        externalReference = transmissionRequest.dokumentId.toString(),
+        type = type,
+        extendedType = extendedType,
+        externalReference = dokumentId.toString(),
         sender = Transmission.Sender("ServiceOwner"),
-        relatedTransmissionId = transmissionRequest.relatedTransmissionId,
+        relatedTransmissionId = relatedTransmissionId,
         content =
             Content.create(
-                title = transmissionRequest.tittel,
-                summary = transmissionRequest.sammendrag,
-            ),
-        attachments =
-            listOf(
-                Attachment(
-                    displayName = listOf(ContentValueItem(transmissionRequest.vedleggNavn)),
-                    urls =
-                        listOf(
-                            Attachment.Url(
-                                url = "${transmissionRequest.vedleggApiBaseUrl}/${transmissionRequest.dokumentId}",
-                                mediaType = transmissionRequest.vedleggMediaType,
-                                consumerType = Attachment.Url.AttachmentUrlConsumerType.Api,
-                            ),
-                        ),
-                ),
-                Attachment(
-                    displayName = listOf(ContentValueItem(transmissionRequest.vedleggNavn)),
-                    urls =
-                        listOf(
-                            Attachment.Url(
-                                url = transmissionRequest.vadleggGuiBaseUrl,
-                                mediaType = transmissionRequest.vedleggMediaType,
-                                consumerType = Attachment.Url.AttachmentUrlConsumerType.Gui,
-                            ),
-                        ),
-                ),
-            ),
-    )
-
-fun createTransmission(transmissionRequest: TransmissionRequest): Transmission =
-    Transmission(
-        type = transmissionRequest.type,
-        extendedType = transmissionRequest.extendedType,
-        externalReference = transmissionRequest.dokumentId.toString(),
-        sender = Transmission.Sender("ServiceOwner"),
-        relatedTransmissionId = transmissionRequest.relatedTransmissionId,
-        content =
-            Content.create(
-                title = transmissionRequest.tittel,
-                summary = transmissionRequest.sammendrag,
-            ),
-    )
-
-fun createAttachment(
-    displayName: String,
-    url: String,
-    mediaType: String,
-    consumerType: Attachment.Url.AttachmentUrlConsumerType,
-): Attachment =
-    Attachment(
-        displayName = listOf(ContentValueItem(displayName)),
-        urls =
-            listOf(
-                Attachment.Url(
-                    url = url,
-                    mediaType = mediaType,
-                    consumerType = consumerType,
-                ),
+                title = tittel,
+                summary = sammendrag,
             ),
     )

@@ -50,4 +50,4 @@ data class Transmission(
     }
 }
 
-fun Transmission.addAttachment(attachment: Attachment): Transmission = copy(attachments = (attachments.orEmpty() + attachment))
+fun Transmission.addAttachment(vararg attachments: Attachment): Transmission = copy(attachments = this.attachments.orEmpty() + attachments)

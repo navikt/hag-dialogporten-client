@@ -20,3 +20,21 @@ data class Attachment(
         }
     }
 }
+
+fun createAttachment(
+    displayName: String,
+    url: String,
+    mediaType: String,
+    consumerType: Attachment.Url.AttachmentUrlConsumerType,
+): Attachment =
+    Attachment(
+        displayName = listOf(ContentValueItem(displayName)),
+        urls =
+            listOf(
+                Attachment.Url(
+                    url = url,
+                    mediaType = mediaType,
+                    consumerType = consumerType,
+                ),
+            ),
+    )
