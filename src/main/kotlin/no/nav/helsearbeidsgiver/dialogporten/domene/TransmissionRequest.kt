@@ -1,10 +1,8 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
-import io.ktor.http.ContentType
 import java.util.UUID
 
 abstract class TransmissionRequest {
-    val vedleggMediaType = ContentType.Application.Json.toString()
     abstract val extendedType: String
     abstract val dokumentId: UUID
     abstract val tittel: String

@@ -1,5 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
+import io.ktor.http.ContentType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -37,4 +38,28 @@ fun createAttachment(
                     consumerType = consumerType,
                 ),
             ),
+    )
+
+fun createApiAttachment(
+    displayName: String,
+    url: String,
+    mediaType: String = ContentType.Application.Json.toString(),
+): Attachment =
+    createAttachment(
+        displayName = displayName,
+        url = url,
+        mediaType = mediaType,
+        consumerType = Attachment.Url.AttachmentUrlConsumerType.Api,
+    )
+
+fun createGuiAttachment(
+    displayName: String,
+    url: String,
+    mediaType: String = ContentType.Text.Html.toString(),
+): Attachment =
+    createAttachment(
+        displayName = displayName,
+        url = url,
+        mediaType = mediaType,
+        consumerType = Attachment.Url.AttachmentUrlConsumerType.Gui,
     )
