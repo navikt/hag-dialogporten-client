@@ -49,5 +49,3 @@ data class Transmission(
         Correction,
     }
 }
-
-fun Transmission.addAttachment(vararg attachments: Attachment): Transmission = copy(attachments = this.attachments.orEmpty() + attachments)

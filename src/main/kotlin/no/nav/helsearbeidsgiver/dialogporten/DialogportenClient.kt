@@ -20,7 +20,9 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
+import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
+import no.nav.helsearbeidsgiver.dialogporten.domene.toTransmission
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
@@ -52,6 +54,15 @@ class DialogportenClient(
             logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
     }
+
+    suspend fun addTransmission(
+        dialogId: UUID,
+        transmissionRequest: TransmissionRequest,
+    ): UUID =
+        addTransmission(
+            dialogId,
+            transmission = transmissionRequest.toTransmission(),
+        )
 
     suspend fun addTransmission(
         dialogId: UUID,

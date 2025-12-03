@@ -9,6 +9,7 @@ abstract class TransmissionRequest {
     abstract val sammendrag: String?
     abstract val type: Transmission.TransmissionType
     abstract val relatedTransmissionId: UUID?
+    abstract val attachments: List<Attachment>?
 }
 
 fun TransmissionRequest.toTransmission(): Transmission =
@@ -23,4 +24,5 @@ fun TransmissionRequest.toTransmission(): Transmission =
                 title = tittel,
                 summary = sammendrag,
             ),
+        attachments = attachments,
     )
