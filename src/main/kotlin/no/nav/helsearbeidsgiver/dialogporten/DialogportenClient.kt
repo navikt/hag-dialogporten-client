@@ -23,9 +23,11 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.dialogporten.domene.toTransmission
+import no.nav.helsearbeidsgiver.utils.json.toJson
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
+import kotlin.math.log
 
 class DialogportenClient(
     baseUrl: String,
@@ -40,6 +42,7 @@ class DialogportenClient(
     suspend fun createDialog(createDialogRequest: CreateDialogRequest): UUID {
         val dialog =
             buildDialogFromRequest(createDialogRequest)
+        logger.warn("Oppretter dialog ${dialog.toJson(Dialog.serializer())}")
         return runCatching<DialogportenClient, UUID> {
             val response =
                 httpClient
