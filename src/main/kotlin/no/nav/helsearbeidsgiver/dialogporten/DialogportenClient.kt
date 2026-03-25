@@ -164,4 +164,5 @@ private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: Creat
             ),
         transmissions = createDialogRequest.transmissions,
         isApiOnly = createDialogRequest.isApiOnly,
+        attachments = createDialogRequest.attachments,
     )
