@@ -108,6 +108,13 @@ class DialogportenClient(
         )
     }
 
+    suspend fun addGuiAction(
+        dialogId: UUID,
+        guiAction: GuiAction,
+    ) {
+        updateDialog(dialogId, listOf(AddGuiActions(listOf(guiAction))))
+    }
+
     suspend fun addAction(
         dialogId: UUID,
         apiAction: ApiAction,
