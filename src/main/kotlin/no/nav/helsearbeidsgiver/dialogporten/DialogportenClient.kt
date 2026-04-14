@@ -11,6 +11,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
+import no.nav.helsearbeidsgiver.dialogporten.domene.Attachment
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
@@ -19,6 +20,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -128,6 +130,18 @@ class DialogportenClient(
                 listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions)), AddStatus(DialogStatus.RequiresAttention)),
             )
         }
+    }
+
+    suspend fun replaceAttachment(
+        dialogId: UUID,
+        attachments: List<Attachment>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                ReplaceAttachments(attachments),
+            ),
+        )
     }
 
     private suspend fun updateDialog(

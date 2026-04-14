@@ -47,3 +47,9 @@ data class RemoveGuiActions(
     override val op: String = "remove",
     override val path: String = "/guiActions",
 ) : PatchOperation()
+
+data class ReplaceAttachments(
+    val value: List<Attachment>,
+    override val op: String = "replace",
+    override val path: String = "/attachments",
+) : PatchOperation()
