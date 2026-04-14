@@ -48,6 +48,7 @@ data class RemoveGuiActions(
     override val path: String = "/guiActions",
 ) : PatchOperation()
 
+@Serializable
 data class ReplaceAttachments(
     val value: List<Attachment>,
     override val op: String = "replace",
