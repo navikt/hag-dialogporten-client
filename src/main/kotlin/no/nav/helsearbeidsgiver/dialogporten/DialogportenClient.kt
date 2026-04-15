@@ -74,6 +74,7 @@ class DialogportenClient(
         transmission: Transmission,
     ): UUID =
         runCatching {
+            logger.warn("Legger til transmission ${transmission.toJson(Transmission.serializer())} i dialog $dialogId")
             val response =
                 httpClient
                     .post("$dialogportenUrl/$dialogId/transmissions") {
@@ -82,7 +83,7 @@ class DialogportenClient(
                         setBody(transmission)
                     }.body<String>()
 
-            UUID.fromString(response.removeSurrounding("\""))
+            UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Transmission opprettet med id: $it") }
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
         }
