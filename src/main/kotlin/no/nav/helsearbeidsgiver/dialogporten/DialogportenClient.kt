@@ -54,7 +54,7 @@ class DialogportenClient(
 
                         setBody(dialog)
                     }.body<String>()
-            UUID.fromString(response.removeSurrounding("\""))
+            UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Dialog opprettet med id: $it") }
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
