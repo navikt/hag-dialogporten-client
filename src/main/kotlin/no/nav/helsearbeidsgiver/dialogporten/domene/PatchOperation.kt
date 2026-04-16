@@ -57,14 +57,14 @@ data class ReplaceAttachments(
 
 @Serializable
 data class ReplaceGuiActions(
-    val value: List<Action>,
+    val value: List<GuiAction>,
     override val op: String = "replace",
     override val path: String = "/guiActions",
 ) : PatchOperation()
 
 @Serializable
 data class ReplaceApiActions(
-    val value: List<Action>,
+    val value: List<ApiAction>,
     override val op: String = "replace",
     override val path: String = "/apiActions",
 ) : PatchOperation()
