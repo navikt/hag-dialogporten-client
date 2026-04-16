@@ -20,7 +20,9 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -133,14 +135,18 @@ class DialogportenClient(
         }
     }
 
-    suspend fun replaceAttachment(
+    suspend fun replaceAttachmentsAndActions(
         dialogId: UUID,
         attachments: List<Attachment>,
+        apiActions: List<ApiAction>,
+        guiActions: List<GuiAction>,
     ) {
         updateDialog(
             dialogId,
             listOf(
                 ReplaceAttachments(attachments),
+                ReplaceApiActions(apiActions),
+                ReplaceGuiActions(guiActions),
             ),
         )
     }
