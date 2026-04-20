@@ -27,11 +27,9 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.dialogporten.domene.toTransmission
-import no.nav.helsearbeidsgiver.utils.json.toJson
 import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
-import kotlin.math.log
 
 class DialogportenClient(
     baseUrl: String,
@@ -46,8 +44,8 @@ class DialogportenClient(
     suspend fun createDialog(createDialogRequest: CreateDialogRequest): UUID {
         val dialog =
             buildDialogFromRequest(createDialogRequest)
-        logger.warn("Oppretter dialog ${dialog.toJson(Dialog.serializer())}")
-        return runCatching<DialogportenClient, UUID> {
+
+        return runCatching {
             val response =
                 httpClient
                     .post(dialogportenUrl) {
@@ -76,7 +74,6 @@ class DialogportenClient(
         transmission: Transmission,
     ): UUID =
         runCatching {
-            logger.warn("Legger til transmission ${transmission.toJson(Transmission.serializer())} i dialog $dialogId")
             val response =
                 httpClient
                     .post("$dialogportenUrl/$dialogId/transmissions") {
@@ -123,14 +120,14 @@ class DialogportenClient(
     suspend fun addAction(
         dialogId: UUID,
         apiAction: ApiAction,
-        guiActions: GuiAction?,
+        guiAction: GuiAction?,
     ) {
-        if (guiActions == null) {
+        if (guiAction == null) {
             updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddStatus(DialogStatus.RequiresAttention)))
         } else {
             updateDialog(
                 dialogId,
-                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions)), AddStatus(DialogStatus.RequiresAttention)),
+                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiAction)), AddStatus(DialogStatus.RequiresAttention)),
             )
         }
     }
@@ -155,7 +152,7 @@ class DialogportenClient(
         dialogId: UUID,
         patchOperations: List<PatchOperation>,
     ) {
-        runCatching<DialogportenClient, Unit> {
+        runCatching {
             httpClient
                 .patch("$dialogportenUrl/$dialogId") {
                     header(HttpHeaders.ContentType, "application/json-patch+json")
@@ -171,8 +168,7 @@ class DialogportenClient(
         e: Throwable,
     ): Nothing {
         logger.error(msg)
-        sikkerLogger
-            .error(msg, e)
+        sikkerLogger.error(msg, e)
         throw DialogportenClientException(msg)
     }
 }

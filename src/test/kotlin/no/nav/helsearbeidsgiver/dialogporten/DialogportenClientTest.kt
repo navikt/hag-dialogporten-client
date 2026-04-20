@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import no.nav.helsearbeidsgiver.dialogporten.domene.Action
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
+import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -73,6 +74,41 @@ class DialogportenClientTest :
 
             shouldThrow<DialogportenClientException> {
                 dialogportenKlient.createDialog(request)
+            }
+        }
+
+        test("replaceAttachmentsAndActions returnerer ingenting ved suksess") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
+            val dialogId = UUID.randomUUID()
+            val apiAction = ApiAction(action = Action.READ.value, name = "name", endpoints = emptyList())
+            val guiAction =
+                GuiAction(
+                    action = Action.READ.value,
+                    name = "name",
+                    url = "url",
+                    title = listOf(),
+                    priority = GuiAction.Priority.Primary,
+                )
+
+            dialogportenClient.replaceAttachmentsAndActions(
+                dialogId,
+                attachments = emptyList(),
+                apiActions = listOf(apiAction),
+                guiActions = listOf(guiAction),
+            ) shouldBe Unit
+        }
+
+        test("replaceAttachmentsAndActions kaster exception ved feil response") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
+            val dialogId = UUID.randomUUID()
+
+            shouldThrow<DialogportenClientException> {
+                dialogportenClient.replaceAttachmentsAndActions(
+                    dialogId,
+                    attachments = emptyList(),
+                    apiActions = emptyList(),
+                    guiActions = emptyList(),
+                )
             }
         }
     })
