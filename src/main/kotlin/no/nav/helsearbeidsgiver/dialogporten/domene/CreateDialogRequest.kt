@@ -10,4 +10,5 @@ data class CreateDialogRequest(
     val idempotentKey: String,
     val isApiOnly: Boolean = true,
     val transmissions: List<Transmission>,
+    val attachments: List<Attachment>? = null,
 )

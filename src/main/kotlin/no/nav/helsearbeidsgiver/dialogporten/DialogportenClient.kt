@@ -11,6 +11,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
+import no.nav.helsearbeidsgiver.dialogporten.domene.Attachment
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
@@ -19,6 +20,9 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceApiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
+import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -40,7 +44,8 @@ class DialogportenClient(
     suspend fun createDialog(createDialogRequest: CreateDialogRequest): UUID {
         val dialog =
             buildDialogFromRequest(createDialogRequest)
-        return runCatching<DialogportenClient, UUID> {
+
+        return runCatching {
             val response =
                 httpClient
                     .post(dialogportenUrl) {
@@ -49,7 +54,7 @@ class DialogportenClient(
 
                         setBody(dialog)
                     }.body<String>()
-            UUID.fromString(response.removeSurrounding("\""))
+            UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Dialog opprettet med id: $it") }
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
@@ -77,7 +82,7 @@ class DialogportenClient(
                         setBody(transmission)
                     }.body<String>()
 
-            UUID.fromString(response.removeSurrounding("\""))
+            UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Transmission opprettet med id: $it") }
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
         }
@@ -105,26 +110,49 @@ class DialogportenClient(
         )
     }
 
+    suspend fun addGuiAction(
+        dialogId: UUID,
+        guiAction: GuiAction,
+    ) {
+        updateDialog(dialogId, listOf(AddGuiActions(listOf(guiAction))))
+    }
+
     suspend fun addAction(
         dialogId: UUID,
         apiAction: ApiAction,
-        guiActions: GuiAction?,
+        guiAction: GuiAction?,
     ) {
-        if (guiActions == null) {
+        if (guiAction == null) {
             updateDialog(dialogId, listOf(AddApiActions(listOf(apiAction)), AddStatus(DialogStatus.RequiresAttention)))
         } else {
             updateDialog(
                 dialogId,
-                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiActions)), AddStatus(DialogStatus.RequiresAttention)),
+                listOf(AddApiActions(listOf(apiAction)), AddGuiActions(listOf(guiAction)), AddStatus(DialogStatus.RequiresAttention)),
             )
         }
+    }
+
+    suspend fun replaceAttachmentsAndActions(
+        dialogId: UUID,
+        attachments: List<Attachment>,
+        apiActions: List<ApiAction>,
+        guiActions: List<GuiAction>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                ReplaceAttachments(attachments),
+                ReplaceApiActions(apiActions),
+                ReplaceGuiActions(guiActions),
+            ),
+        )
     }
 
     private suspend fun updateDialog(
         dialogId: UUID,
         patchOperations: List<PatchOperation>,
     ) {
-        runCatching<DialogportenClient, Unit> {
+        runCatching {
             httpClient
                 .patch("$dialogportenUrl/$dialogId") {
                     header(HttpHeaders.ContentType, "application/json-patch+json")
@@ -140,8 +168,7 @@ class DialogportenClient(
         e: Throwable,
     ): Nothing {
         logger.error(msg)
-        sikkerLogger
-            .error(msg, e)
+        sikkerLogger.error(msg, e)
         throw DialogportenClientException(msg)
     }
 }
@@ -161,4 +188,5 @@ private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: Creat
             ),
         transmissions = createDialogRequest.transmissions,
         isApiOnly = createDialogRequest.isApiOnly,
+        attachments = createDialogRequest.attachments.orEmpty(),
     )
