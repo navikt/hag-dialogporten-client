@@ -148,6 +148,18 @@ class DialogportenClient(
         )
     }
 
+    suspend fun replaceAttachments(
+        dialogId: UUID,
+        attachments: List<Attachment>,
+    ) {
+        updateDialog(
+            dialogId,
+            listOf(
+                ReplaceAttachments(attachments),
+            ),
+        )
+    }
+
     private suspend fun updateDialog(
         dialogId: UUID,
         patchOperations: List<PatchOperation>,
