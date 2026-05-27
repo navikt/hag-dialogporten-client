@@ -1,12 +1,15 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
 import io.ktor.client.call.body
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
@@ -31,6 +34,8 @@ import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
 
+private val dialogIdConflictRegex = Regex("DialogId '([0-9a-fA-F-]{36})'")
+
 class DialogportenClient(
     baseUrl: String,
     getToken: () -> String,
@@ -45,7 +50,7 @@ class DialogportenClient(
         val dialog =
             buildDialogFromRequest(createDialogRequest)
 
-        return runCatching {
+        return try {
             val response =
                 httpClient
                     .post(dialogportenUrl) {
@@ -55,7 +60,21 @@ class DialogportenClient(
                         setBody(dialog)
                     }.body<String>()
             UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Dialog opprettet med id: $it") }
-        }.getOrElse { e ->
+        } catch (e: ClientRequestException) {
+            if (e.response.status == HttpStatusCode.Conflict) {
+                val existingDialogId = e.response.bodyAsText().extractDialogIdFromConflict()
+                if (existingDialogId != null) {
+                    logger.info(
+                        "Dialog finnes allerede for ${createDialogRequest.idempotentKey}, bruker eksisterende id: $existingDialogId",
+                    )
+                    existingDialogId
+                } else {
+                    logAndThrow("Response fra Dialogporten inneholder ikke dialogId", e)
+                }
+            } else {
+                logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
+            }
+        } catch (e: Throwable) {
             logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
     }
@@ -172,6 +191,13 @@ class DialogportenClient(
         throw DialogportenClientException(msg)
     }
 }
+
+private fun String.extractDialogIdFromConflict(): UUID? =
+    dialogIdConflictRegex
+        .find(this)
+        ?.groupValues
+        ?.getOrNull(1)
+        ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
 
 private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: CreateDialogRequest): Dialog =
     Dialog(
