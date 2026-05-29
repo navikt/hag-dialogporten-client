@@ -56,6 +56,8 @@ val jsonConfigEncodeDefaults =
     Json {
         jsonConfig.configuration
         encodeDefaults = true
+        // Dialogporten responses may include additional fields not present in our models.
+        ignoreUnknownKeys = true
     }
 
 private fun Throwable.isRetryableException() =
