@@ -24,7 +24,7 @@ data class DialogResponse(
     val idempotentKey: String?,
     val status: DialogStatus? = null,
     val content: Content,
-    val transmissions: List<Transmission>?,
+    val transmissions: List<Transmission>? = null,
     val isApiOnly: Boolean? = true,
-    val attachments: List<Attachment>?,
+    val attachments: List<Attachment>? = null,
 )
