@@ -14,7 +14,7 @@ data class Dialog(
     val isApiOnly: Boolean? = true,
     val attachments: List<Attachment>,
 )
-
+@Serializable
 data class DialogResponse(
     val id: String,
     val serviceResource: String,
