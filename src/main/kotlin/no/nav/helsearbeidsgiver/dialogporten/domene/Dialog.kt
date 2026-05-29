@@ -14,3 +14,16 @@ data class Dialog(
     val isApiOnly: Boolean? = true,
     val attachments: List<Attachment>,
 )
+
+data class DialogResponse(
+    val id: String,
+    val serviceResource: String,
+    val party: String,
+    val externalReference: String,
+    val idempotentKey: String?,
+    val status: DialogStatus? = null,
+    val content: Content,
+    val transmissions: List<Transmission>?,
+    val isApiOnly: Boolean? = true,
+    val attachments: List<Attachment>?,
+)
