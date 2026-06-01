@@ -1,12 +1,15 @@
 package no.nav.helsearbeidsgiver.dialogporten
 
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
@@ -15,6 +18,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Attachment
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
+import no.nav.helsearbeidsgiver.dialogporten.domene.DialogResponse
 import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
@@ -59,6 +63,18 @@ class DialogportenClient(
             logAndThrow("Feil ved kall til Dialogporten for å opprette dialog", e)
         }
     }
+
+    suspend fun getDialog(dialogId: UUID): Result<DialogResponse> =
+        runCatching {
+            val response =
+                httpClient.get("$dialogportenUrl/$dialogId") {
+                    header(HttpHeaders.Accept, ContentType.Application.Json)
+                }
+            if (!response.status.isSuccess()) {
+                throw IllegalStateException("Uventet status ${response.status.value} ved henting av dialog $dialogId")
+            }
+            response.body<DialogResponse>()
+        }
 
     suspend fun addTransmission(
         dialogId: UUID,
@@ -160,17 +176,45 @@ class DialogportenClient(
         )
     }
 
+    suspend fun replaceTransmission(
+        dialogId: UUID,
+        existingTransmissionId: UUID,
+        transmission: Transmission,
+    ) {
+        try {
+            val response =
+                httpClient
+                    .put("$dialogportenUrl/$dialogId/transmission/$existingTransmissionId") {
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                        setBody(transmission)
+                    }
+
+            if (!response.status.isSuccess()) {
+                throw IllegalStateException(
+                    "Uventet status ${response.status.value} ved erstatning av transmission for dialogId $dialogId med transmissionId $existingTransmissionId",
+                )
+            }
+        } catch (e: Exception) {
+            logAndThrow("Feil ved kall til Dialogporten for å erstatte transmission", e)
+        }
+    }
+
     private suspend fun updateDialog(
         dialogId: UUID,
         patchOperations: List<PatchOperation>,
     ) {
-        runCatching {
-            httpClient
-                .patch("$dialogportenUrl/$dialogId") {
-                    header(HttpHeaders.ContentType, "application/json-patch+json")
-                    setBody(patchOperations)
-                }
-        }.getOrElse { e ->
+        try {
+            val response =
+                httpClient
+                    .patch("$dialogportenUrl/$dialogId") {
+                        header(HttpHeaders.ContentType, "application/json-patch+json")
+                        setBody(patchOperations)
+                    }
+
+            if (!response.status.isSuccess()) {
+                throw IllegalStateException("Uventet status ${response.status.value} ved oppdatering av dialogId $dialogId")
+            }
+        } catch (e: Exception) {
             logAndThrow("Feil ved kall til Dialogporten for å oppdatere dialog", e)
         }
     }
