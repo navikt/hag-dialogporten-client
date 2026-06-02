@@ -38,7 +38,7 @@ import no.nav.helsearbeidsgiver.utils.log.logger
 import no.nav.helsearbeidsgiver.utils.log.sikkerLogger
 import java.util.UUID
 
-private val dialogIdConflictRegex = Regex("DialogId '([0-9a-fA-F-]{36})'")
+private val dialogIdConflictRegex = Regex("(?i)DialogId\\s*'([0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})'")
 
 class DialogportenClient(
     baseUrl: String,
