@@ -134,7 +134,7 @@ class DialogportenClientTest :
         }
         test("createDialog returnerer eksisterende dialogId ved idempotent conflict annen varian 2") {
             val existingDialogId = "019e874f-49c6-724a-8412-0de51e3200ff"
-            val conflictResponse ="""                {
+            val conflictResponse = """                {
                     "type": "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.8",
                     "title": "Conflict.",
                     "status": 409,
@@ -152,5 +152,4 @@ class DialogportenClientTest :
 
             result shouldBe UUID.fromString(existingDialogId)
         }
-
     })
