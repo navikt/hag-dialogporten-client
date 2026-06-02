@@ -111,4 +111,45 @@ class DialogportenClientTest :
                 )
             }
         }
+
+        test("createDialog returnerer eksisterende dialogId ved idempotent conflict") {
+            val existingDialogId = "019e874f-49c6-724a-8412-0de51e3200ff"
+            val conflictResponse =
+                """{"errors":{"IdempotentKey":["'6e449899-d758-4237-88f5-8be48eb3966a' already exists with DialogId '$existingDialogId'"]}}"""
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Conflict, conflictResponse)
+
+            val result = dialogportenKlient.createDialog(MockData.createDialogRequest)
+
+            result shouldBe UUID.fromString(existingDialogId)
+        }
+        test("createDialog returnerer eksisterende dialogId ved idempotent conflict annen variant 1") {
+            val existingDialogId = "019e874f-49c6-724a-8412-0de51e3200ff"
+            val conflictResponse =
+                """'6e449899-d758-4237-88f5-8be48eb3966a' already exists with DialogId '$existingDialogId'""""
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Conflict, conflictResponse)
+
+            val result = dialogportenKlient.createDialog(MockData.createDialogRequest)
+
+            result shouldBe UUID.fromString(existingDialogId)
+        }
+        test("createDialog returnerer eksisterende dialogId ved idempotent conflict annen varian 2") {
+            val existingDialogId = "019e874f-49c6-724a-8412-0de51e3200ff"
+            val conflictResponse = """                {
+                    "type": "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.8",
+                    "title": "Conflict.",
+                    "status": 409,
+                    "instance": "/api/v1/serviceowner/dialogs",
+                    "errors": {
+                    "IdempotentKey": [
+                    "'019e2068-7a13-71aa-8660-20afd766fcb8' already exists with DialogId '$existingDialogId'"
+                    ]
+                },
+                    "traceId": "00-8ae44cbc239c0358ffa5120561ac1634-8a9f27bd595da08d-01"
+                }""""
+            val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Conflict, conflictResponse)
+
+            val result = dialogportenKlient.createDialog(MockData.createDialogRequest)
+
+            result shouldBe UUID.fromString(existingDialogId)
+        }
     })
