@@ -16,6 +16,7 @@ data class Transmission(
     val content: Content,
     val relatedTransmissionId: UUID? = null,
     val attachments: List<Attachment>? = null,
+    val isSilentUpdate: Boolean = false,
 ) {
     @Serializable
     data class Sender(
