@@ -10,6 +10,7 @@ abstract class TransmissionRequest {
     abstract val type: Transmission.TransmissionType
     abstract val relatedTransmissionId: UUID?
     abstract val attachments: List<Attachment>
+    open val isSilentUpdate: Boolean? = false
 }
 
 fun TransmissionRequest.toTransmission(): Transmission =
@@ -25,4 +26,5 @@ fun TransmissionRequest.toTransmission(): Transmission =
                 summary = sammendrag,
             ),
         attachments = attachments,
+        isSilentUpdate = isSilentUpdate,
     )

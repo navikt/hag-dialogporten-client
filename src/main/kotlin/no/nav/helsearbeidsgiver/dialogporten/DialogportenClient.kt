@@ -204,7 +204,7 @@ class DialogportenClient(
         try {
             val response =
                 httpClient
-                    .put("$dialogportenUrl/$dialogId/transmission/$existingTransmissionId") {
+                    .put("$dialogportenUrl/$dialogId/transmissions/$existingTransmissionId") {
                         header(HttpHeaders.ContentType, ContentType.Application.Json)
                         setBody(transmission)
                     }
