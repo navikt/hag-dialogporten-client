@@ -26,6 +26,12 @@ fun String.toContentValue() =
         value = listOf(ContentValueItem(this)),
     )
 
+fun String.toAdditionalInfoContentValue() =
+    ContentValue(
+        value = listOf(ContentValueItem(this)),
+        mediaType = "text/markdown",
+    )
+
 fun Content.Companion.create(
     title: String,
     summary: String?,
@@ -34,5 +40,5 @@ fun Content.Companion.create(
     Content(
         title.toContentValue(),
         summary?.toContentValue(),
-        additionalInfo?.let { ContentValue(listOf(ContentValueItem(it)), "text/markdown") },
+        additionalInfo?.toAdditionalInfoContentValue(),
     )
