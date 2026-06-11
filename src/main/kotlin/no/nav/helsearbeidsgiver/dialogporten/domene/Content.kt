@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class Content(
     val title: ContentValue,
     val summary: ContentValue? = null,
+    val additionalInfo: ContentValue? = null,
 )
 
 @Serializable
@@ -28,4 +29,10 @@ fun String.toContentValue() =
 fun Content.Companion.create(
     title: String,
     summary: String?,
-): Content = Content(title.toContentValue(), summary?.toContentValue())
+    additionalInfo: String? = null,
+): Content =
+    Content(
+        title.toContentValue(),
+        summary?.toContentValue(),
+        additionalInfo?.let { ContentValue(listOf(ContentValueItem(it)), "text/markdown") },
+    )

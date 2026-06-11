@@ -6,6 +6,7 @@ data class CreateDialogRequest(
     val orgnr: Orgnr,
     val title: String,
     val summary: String,
+    val additionalInfo: String? = null,
     val externalReference: String,
     val idempotentKey: String,
     val isApiOnly: Boolean = true,
