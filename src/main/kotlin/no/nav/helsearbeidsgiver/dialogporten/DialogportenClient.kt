@@ -141,7 +141,7 @@ Brukes til å oppdatere eksisterende dialogmeldinger som har satt ApiOnly.
 Dette fordi vi må gjøre meldingen synlig for bruker i GUI
 når vi får en søknad på en eksisterende apiOnly-dialogmelding
  */
-    suspend fun fjernApiOnly(dialogId: UUID) {
+    suspend fun removeApiOnly(dialogId: UUID) {
         updateDialog(
             dialogId,
             listOf(
