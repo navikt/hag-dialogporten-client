@@ -261,6 +261,8 @@ private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: Creat
                     createDialogRequest.title,
                 summary =
                     createDialogRequest.summary,
+                additionalInfo =
+                    createDialogRequest.additionalInfo,
             ),
         transmissions = createDialogRequest.transmissions,
         isApiOnly = createDialogRequest.isApiOnly,

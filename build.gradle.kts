@@ -47,6 +47,10 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
+tasks.register("printVersion") {
+    println(project.version)
+}
+
 tasks.test {
     useJUnitPlatform()
 }
