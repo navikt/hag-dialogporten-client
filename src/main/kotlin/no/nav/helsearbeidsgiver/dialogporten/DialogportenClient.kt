@@ -27,6 +27,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveIsApiOnly
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceGuiActions
@@ -131,6 +132,20 @@ class DialogportenClient(
             dialogId,
             listOf(
                 AddStatus(dialogStatus),
+            ),
+        )
+    }
+
+/*
+Brukes til å oppdatere eksisterende dialogmeldinger som har satt ApiOnly.
+Dette fordi vi må gjøre meldingen synlig for bruker i GUI
+når vi får en søknad på en eksisterende apiOnly-dialogmelding
+ */
+    suspend fun removeApiOnly(dialogId: UUID) {
+        updateDialog(
+            dialogId,
+            listOf(
+                RemoveIsApiOnly(),
             ),
         )
     }
