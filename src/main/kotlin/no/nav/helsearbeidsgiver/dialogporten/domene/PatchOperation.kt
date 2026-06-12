@@ -68,3 +68,10 @@ data class ReplaceApiActions(
     override val op: String = "replace",
     override val path: String = "/apiActions",
 ) : PatchOperation()
+
+@Serializable
+data class ReplaceIsApiOnly(
+    val value: Boolean = false, // apiOnly: false
+    override val op: String = "replace",
+    override val path: String = "/isApiOnly",
+) : PatchOperation()
