@@ -27,10 +27,10 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveGuiActions
+import no.nav.helsearbeidsgiver.dialogporten.domene.RemoveIsApiOnly
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceGuiActions
-import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceIsApiOnly
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
@@ -145,7 +145,7 @@ når vi får en søknad på en eksisterende apiOnly-dialogmelding
         updateDialog(
             dialogId,
             listOf(
-                ReplaceIsApiOnly(),
+                RemoveIsApiOnly(),
             ),
         )
     }
