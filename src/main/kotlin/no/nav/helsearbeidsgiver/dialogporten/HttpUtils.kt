@@ -7,6 +7,7 @@ import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -14,6 +15,8 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import no.nav.helsearbeidsgiver.utils.json.jsonConfig
+
+private const val SEND_BUFFER_FOR_AUTH_AND_REDIRECTS = 3
 
 internal fun createHttpClient(
     maxRetries: Int,
@@ -25,6 +28,10 @@ internal fun HttpClientConfig<*>.configure(
     getToken: () -> String,
 ) {
     expectSuccess = true
+
+    install(HttpSend) {
+        maxSendCount = retries + SEND_BUFFER_FOR_AUTH_AND_REDIRECTS
+    }
 
     install(ContentNegotiation) {
         json(jsonConfigEncodeDefaults)
