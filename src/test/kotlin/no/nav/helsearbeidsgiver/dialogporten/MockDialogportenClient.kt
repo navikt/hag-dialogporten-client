@@ -6,6 +6,7 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.OutgoingContent
 import io.ktor.http.headersOf
 import io.mockk.every
 import no.nav.helsearbeidsgiver.utils.test.mock.mockStatic
@@ -13,9 +14,20 @@ import no.nav.helsearbeidsgiver.utils.test.mock.mockStatic
 fun mockDialogportenClient(
     status: HttpStatusCode,
     content: String = "",
-): DialogportenClient {
+): DialogportenClient = mockDialogportenClientMedRespons(status, content).first
+
+fun mockDialogportenClientMedRespons(
+    status: HttpStatusCode,
+    content: String = "",
+): Pair<DialogportenClient, () -> String> {
+    var sisteRequestBody = ""
     val mockEngine =
-        MockEngine {
+        MockEngine { request ->
+            sisteRequestBody =
+                when (val body = request.body) {
+                    is OutgoingContent.ByteArrayContent -> body.bytes().decodeToString()
+                    else -> ""
+                }
             respond(
                 content = content,
                 status = status,
@@ -23,8 +35,10 @@ fun mockDialogportenClient(
             )
         }
     val mockHttpClient = HttpClient(mockEngine) { configure(1) { "" } }
-    return mockStatic(::createHttpClient) {
-        every { createHttpClient(any(), any()) } returns mockHttpClient
-        DialogportenClient(baseUrl = "url", ressurs = "ressurs", getToken = { "" })
-    }
+    val client =
+        mockStatic(::createHttpClient) {
+            every { createHttpClient(any(), any()) } returns mockHttpClient
+            DialogportenClient(baseUrl = "url", ressurs = "ressurs", getToken = { "" })
+        }
+    return client to { sisteRequestBody }
 }
