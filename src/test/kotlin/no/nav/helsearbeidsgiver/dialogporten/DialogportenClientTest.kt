@@ -3,9 +3,7 @@ package no.nav.helsearbeidsgiver.dialogporten
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.runBlocking
 import no.nav.helsearbeidsgiver.dialogporten.domene.Action
 import no.nav.helsearbeidsgiver.dialogporten.domene.ApiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
@@ -13,21 +11,10 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
-import no.nav.helsearbeidsgiver.dialogporten.domene.nyUuidv7
 import java.util.UUID
 
 class DialogportenClientTest :
     FunSpec({
-        val mockTransmission =
-            Transmission(
-                type = Transmission.TransmissionType.Information,
-                extendedType = "extendedType",
-                externalReference = "externalReference",
-                sender = Transmission.Sender(actorType = "actorType"),
-                content = Content.create("title", null),
-                attachments = emptyList(),
-            )
-
         test("Opprett dialog  gir id tilbake") {
 
             val dialogportenKlient = mockDialogportenClient(HttpStatusCode.Created, MockData.gyldingRespons)
@@ -35,30 +22,20 @@ class DialogportenClientTest :
 
             dialogportenKlient.createDialog(request) shouldBe UUID.fromString(MockData.gyldingRespons)
         }
-        test("addTransmission uten vedlagt UUIDv7 gir id tilbake") {
+        test("addTransmission gir id tilbake") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.Accepted, MockData.gyldingRespons)
             val dialogId = UUID.randomUUID()
-
-            dialogportenClient.addTransmission(dialogId, mockTransmission) shouldBe UUID.fromString(MockData.gyldingRespons)
-        }
-        test("addTransmission med vedlagt UUIDv7 sender med id i request") {
-            val (dialogportenClient, sisteRequestBody) = mockDialogportenClientMedRespons(HttpStatusCode.Accepted, MockData.gyldingRespons)
-            val dialogId = UUID.randomUUID()
-            val vedlagtId = nyUuidv7()
-
-            dialogportenClient.addTransmission(dialogId, mockTransmission.copy(id = vedlagtId))
-
-            sisteRequestBody() shouldContain vedlagtId.toString()
-        }
-        test("addTransmission med vedlagt id som ikke er UUIDv7 kaster exception") {
-            val dialogportenClient = mockDialogportenClient(HttpStatusCode.Accepted, MockData.gyldingRespons)
-            val dialogId = UUID.randomUUID()
-
-            shouldThrow<IllegalArgumentException> {
-                runBlocking {
-                    dialogportenClient.addTransmission(dialogId, mockTransmission.copy(id = UUID.randomUUID()))
-                }
-            }
+            dialogportenClient.addTransmission(
+                dialogId,
+                Transmission(
+                    type = Transmission.TransmissionType.Information,
+                    extendedType = "extendedType",
+                    externalReference = "externalReference",
+                    sender = Transmission.Sender(actorType = "actorType"),
+                    content = Content.create("title", null),
+                    attachments = emptyList(),
+                ),
+            ) shouldBe UUID.fromString(MockData.gyldingRespons)
         }
         test("addApiActions returnerer ingenting ved sukksess") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)

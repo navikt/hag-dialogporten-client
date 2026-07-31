@@ -11,11 +11,6 @@ abstract class TransmissionRequest {
     abstract val relatedTransmissionId: UUID?
     abstract val attachments: List<Attachment>
     open val isSilentUpdate: Boolean? = false
-    open val id: UUID? = null
-
-    init {
-        id.requireGyldigUuidv7orNull()
-    }
 }
 
 fun TransmissionRequest.toTransmission(): Transmission =
@@ -32,5 +27,4 @@ fun TransmissionRequest.toTransmission(): Transmission =
             ),
         attachments = attachments,
         isSilentUpdate = isSilentUpdate,
-        id = id,
     )
