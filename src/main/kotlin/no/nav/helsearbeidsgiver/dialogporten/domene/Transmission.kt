@@ -17,7 +17,12 @@ data class Transmission(
     val relatedTransmissionId: UUID? = null,
     val attachments: List<Attachment>? = null,
     val isSilentUpdate: Boolean? = false,
+    val id: UUID? = null,
 ) {
+    init {
+        id.requireGyldigUuidv7orNull()
+    }
+
     @Serializable
     data class Sender(
         val actorType: String,
