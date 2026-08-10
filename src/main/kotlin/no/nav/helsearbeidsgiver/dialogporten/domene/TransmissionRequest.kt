@@ -1,5 +1,6 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
+import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission.Sender.ActorType
 import java.util.UUID
 
 abstract class TransmissionRequest {
@@ -24,7 +25,7 @@ fun TransmissionRequest.toTransmission(): Transmission =
         type = type,
         extendedType = extendedType,
         externalReference = dokumentId.toString(),
-        sender = Transmission.Sender("ServiceOwner"),
+        sender = Transmission.Sender(ActorType.ServiceOwner),
         relatedTransmissionId = relatedTransmissionId,
         content =
             Content.create(

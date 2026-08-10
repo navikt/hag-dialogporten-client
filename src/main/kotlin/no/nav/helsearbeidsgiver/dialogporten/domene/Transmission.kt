@@ -25,8 +25,13 @@ data class Transmission(
 
     @Serializable
     data class Sender(
-        val actorType: String,
-    )
+        val actorType: ActorType,
+    ) {
+        @Serializable
+        enum class ActorType {
+            ServiceOwner,
+        }
+    }
 
     @Serializable
     enum class TransmissionType {
