@@ -7,6 +7,7 @@ data class Content(
     val title: ContentValue,
     val summary: ContentValue? = null,
     val additionalInfo: ContentValue? = null,
+    val contentReference: ContentValue? = null,
 )
 
 @Serializable
@@ -26,6 +27,12 @@ fun String.toContentValue() =
         value = listOf(ContentValueItem(this)),
     )
 
+fun String.toContentReferenceValue() =
+    ContentValue(
+        value = listOf(ContentValueItem(this)),
+        mediaType = "application/vnd.dialogporten.frontchannelembed+json;type=markdown",
+    )
+
 fun String.toAdditionalInfoContentValue() =
     ContentValue(
         value = listOf(ContentValueItem(this)),
@@ -35,10 +42,12 @@ fun String.toAdditionalInfoContentValue() =
 fun Content.Companion.create(
     title: String,
     summary: String?,
+    contentReferenceFceUrl: String? = null,
     additionalInfo: String? = null,
 ): Content =
     Content(
-        title.toContentValue(),
-        summary?.toContentValue(),
-        additionalInfo?.toAdditionalInfoContentValue(),
+        title = title.toContentValue(),
+        summary = summary?.toContentValue(),
+        additionalInfo = additionalInfo?.toAdditionalInfoContentValue(),
+        contentReference = contentReferenceFceUrl?.toContentReferenceValue(),
     )

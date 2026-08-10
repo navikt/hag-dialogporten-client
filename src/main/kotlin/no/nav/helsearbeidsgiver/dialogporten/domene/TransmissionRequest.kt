@@ -7,6 +7,7 @@ abstract class TransmissionRequest {
     abstract val dokumentId: UUID
     abstract val tittel: String
     abstract val sammendrag: String?
+    abstract val contentReferenceFceUrl: String?
     abstract val type: Transmission.TransmissionType
     abstract val relatedTransmissionId: UUID?
     abstract val attachments: List<Attachment>
@@ -29,6 +30,7 @@ fun TransmissionRequest.toTransmission(): Transmission =
             Content.create(
                 title = tittel,
                 summary = sammendrag,
+                contentReferenceFceUrl = contentReferenceFceUrl,
             ),
         attachments = attachments,
         isSilentUpdate = isSilentUpdate,
