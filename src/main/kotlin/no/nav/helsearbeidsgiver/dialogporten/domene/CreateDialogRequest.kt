@@ -9,7 +9,7 @@ data class CreateDialogRequest(
     val additionalInfo: String? = null,
     val externalReference: String,
     val idempotentKey: String,
-    val isApiOnly: Boolean = true,
+    val isApiOnly: Boolean = false,
     val transmissions: List<Transmission>,
     val attachments: List<Attachment>? = null,
 )
