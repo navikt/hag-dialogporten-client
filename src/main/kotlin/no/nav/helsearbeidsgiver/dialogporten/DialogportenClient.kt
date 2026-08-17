@@ -22,7 +22,6 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Attachment
 import no.nav.helsearbeidsgiver.dialogporten.domene.Content
 import no.nav.helsearbeidsgiver.dialogporten.domene.CreateDialogRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.Dialog
-import no.nav.helsearbeidsgiver.dialogporten.domene.DialogResponse
 import no.nav.helsearbeidsgiver.dialogporten.domene.DialogStatus
 import no.nav.helsearbeidsgiver.dialogporten.domene.GuiAction
 import no.nav.helsearbeidsgiver.dialogporten.domene.PatchOperation
@@ -87,7 +86,7 @@ class DialogportenClient(
         }
     }
 
-    suspend fun getDialog(dialogId: UUID): Result<DialogResponse> =
+    suspend fun getDialog(dialogId: UUID): Result<Dialog> =
         runCatching {
             val response =
                 httpClient.get("$dialogportenUrl/$dialogId") {
@@ -96,7 +95,7 @@ class DialogportenClient(
             if (!response.status.isSuccess()) {
                 throw IllegalStateException("Uventet status ${response.status.value} ved henting av dialog $dialogId")
             }
-            response.body<DialogResponse>()
+            response.body<Dialog>()
         }
 
     suspend fun addTransmission(
@@ -299,6 +298,7 @@ når vi får en søknad på en eksisterende apiOnly-dialogmelding
 
 private fun DialogportenClient.buildDialogFromRequest(createDialogRequest: CreateDialogRequest): Dialog =
     Dialog(
+        id = createDialogRequest.id,
         serviceResource = "urn:altinn:resource:$ressurs",
         party = "urn:altinn:organization:identifier-no:${createDialogRequest.orgnr}",
         externalReference = createDialogRequest.externalReference,

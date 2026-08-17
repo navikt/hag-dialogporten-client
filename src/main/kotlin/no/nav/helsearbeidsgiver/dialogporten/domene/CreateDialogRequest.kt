@@ -1,8 +1,10 @@
 package no.nav.helsearbeidsgiver.dialogporten.domene
 
 import no.nav.helsearbeidsgiver.utils.wrapper.Orgnr
+import java.util.UUID
 
 data class CreateDialogRequest(
+    val id: UUID? = null,
     val orgnr: Orgnr,
     val title: String,
     val summary: String,
@@ -12,4 +14,8 @@ data class CreateDialogRequest(
     val isApiOnly: Boolean = false,
     val transmissions: List<Transmission>,
     val attachments: List<Attachment>? = null,
-)
+) {
+    init {
+        id.requireGyldigUuidv7orNull()
+    }
+}
