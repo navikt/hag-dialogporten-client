@@ -23,7 +23,7 @@ class DialogportenClientTest :
                 type = Transmission.TransmissionType.Information,
                 extendedType = "extendedType",
                 externalReference = "externalReference",
-                sender = Transmission.Sender(actorType = "actorType"),
+                sender = Transmission.Sender(Transmission.Sender.ActorType.ServiceOwner),
                 content = Content.create("title", null),
                 attachments = emptyList(),
             )
@@ -58,6 +58,25 @@ class DialogportenClientTest :
                 runBlocking {
                     dialogportenClient.addTransmission(dialogId, mockTransmission.copy(id = UUID.randomUUID()))
                 }
+            }
+        }
+        test("markTransmissionOpened gir id tilbake og sender med transmissionId i request") {
+            val (dialogportenClient, sisteRequestBody) = mockDialogportenClientMedRespons(HttpStatusCode.Created, MockData.gyldingRespons)
+            val dialogId = UUID.randomUUID()
+            val transmissionId = UUID.randomUUID()
+
+            dialogportenClient.markTransmissionOpened(dialogId, transmissionId) shouldBe UUID.fromString(MockData.gyldingRespons)
+
+            sisteRequestBody() shouldBe
+                """{"type":"TransmissionOpened","transmissionId":"$transmissionId","performedBy":{"actorType":"ServiceOwner"}}"""
+        }
+        test("markTransmissionOpened kaster exception ved feil response") {
+            val dialogportenClient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
+            val dialogId = UUID.randomUUID()
+            val transmissionId = UUID.randomUUID()
+
+            shouldThrow<DialogportenClientException> {
+                dialogportenClient.markTransmissionOpened(dialogId, transmissionId)
             }
         }
         test("addApiActions returnerer ingenting ved sukksess") {

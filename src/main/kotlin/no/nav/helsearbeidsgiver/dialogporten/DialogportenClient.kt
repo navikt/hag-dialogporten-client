@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
+import no.nav.helsearbeidsgiver.dialogporten.domene.Activity
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.AddStatus
@@ -32,6 +33,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceApiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceAttachments
 import no.nav.helsearbeidsgiver.dialogporten.domene.ReplaceGuiActions
 import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission
+import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission.Sender.ActorType
 import no.nav.helsearbeidsgiver.dialogporten.domene.TransmissionRequest
 import no.nav.helsearbeidsgiver.dialogporten.domene.create
 import no.nav.helsearbeidsgiver.dialogporten.domene.toTransmission
@@ -122,6 +124,37 @@ class DialogportenClient(
             UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Transmission opprettet med id: $it") }
         }.getOrElse { e ->
             logAndThrow("Feil ved kall til Dialogporten for å legge til transmission", e)
+        }
+
+    suspend fun markTransmissionOpened(
+        dialogId: UUID,
+        transmissionId: UUID,
+    ): UUID =
+        addActivity(
+            dialogId,
+            Activity(
+                type = Activity.ActivityType.TransmissionOpened,
+                transmissionId = transmissionId,
+                performedBy = Transmission.Sender(ActorType.ServiceOwner),
+            ),
+        )
+
+    suspend fun addActivity(
+        dialogId: UUID,
+        activity: Activity,
+    ): UUID =
+        runCatching {
+            val response =
+                httpClient
+                    .post("$dialogportenUrl/$dialogId/activities") {
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                        header(HttpHeaders.Accept, ContentType.Application.Json)
+                        setBody(activity)
+                    }.body<String>()
+
+            UUID.fromString(response.removeSurrounding("\"")).also { logger.info("Activity opprettet med id: $it") }
+        }.getOrElse { e ->
+            logAndThrow("Feil ved kall til Dialogporten for å legge til activity", e)
         }
 
     suspend fun setDialogStatus(
