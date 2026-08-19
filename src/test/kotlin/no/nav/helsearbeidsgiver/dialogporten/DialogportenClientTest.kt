@@ -20,6 +20,7 @@ class DialogportenClientTest :
     FunSpec({
         val mockTransmission =
             Transmission(
+                id = nyUuidv7(),
                 type = Transmission.TransmissionType.Information,
                 extendedType = "extendedType",
                 externalReference = "externalReference",
