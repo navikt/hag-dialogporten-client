@@ -9,6 +9,7 @@ import java.util.UUID
 
 @Serializable
 data class Transmission(
+    val id: UUID,
     val type: TransmissionType,
     val extendedType: String,
     val externalReference: String?,
@@ -17,7 +18,6 @@ data class Transmission(
     val relatedTransmissionId: UUID? = null,
     val attachments: List<Attachment>? = null,
     val isSilentUpdate: Boolean? = false,
-    val id: UUID? = null,
 ) {
     init {
         id.requireGyldigUuidv7orNull()
