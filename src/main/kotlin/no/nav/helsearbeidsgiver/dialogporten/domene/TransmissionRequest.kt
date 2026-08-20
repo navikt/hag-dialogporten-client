@@ -4,6 +4,7 @@ import no.nav.helsearbeidsgiver.dialogporten.domene.Transmission.Sender.ActorTyp
 import java.util.UUID
 
 abstract class TransmissionRequest {
+    abstract val id: UUID
     abstract val extendedType: String
     abstract val dokumentId: UUID
     abstract val tittel: String
@@ -13,7 +14,6 @@ abstract class TransmissionRequest {
     abstract val relatedTransmissionId: UUID?
     abstract val attachments: List<Attachment>
     open val isSilentUpdate: Boolean? = false
-    open val id: UUID? = null
 
     init {
         id.requireGyldigUuidv7orNull()
