@@ -25,7 +25,7 @@ fun TransmissionRequest.toTransmission(): Transmission =
         type = type,
         extendedType = extendedType,
         externalReference = dokumentId.toString(),
-        sender = Transmission.Sender(ActorType.ServiceOwner),
+        sender = Transmission.Sender(ActorType.ServiceOwner, actorId = null),
         relatedTransmissionId = relatedTransmissionId,
         content =
             Content.create(

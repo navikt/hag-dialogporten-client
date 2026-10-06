@@ -24,7 +24,7 @@ class DialogportenClientTest :
                 type = Transmission.TransmissionType.Information,
                 extendedType = "extendedType",
                 externalReference = "externalReference",
-                sender = Transmission.Sender(Transmission.Sender.ActorType.ServiceOwner),
+                sender = Transmission.Sender(Transmission.Sender.ActorType.ServiceOwner, null),
                 content = Content.create("title", null),
                 attachments = emptyList(),
             )
@@ -65,19 +65,21 @@ class DialogportenClientTest :
             val (dialogportenClient, sisteRequestBody) = mockDialogportenClientMedRespons(HttpStatusCode.Created, MockData.gyldingRespons)
             val dialogId = UUID.randomUUID()
             val transmissionId = UUID.randomUUID()
+            val actorId = "mock_actorId"
 
-            dialogportenClient.markTransmissionOpened(dialogId, transmissionId) shouldBe UUID.fromString(MockData.gyldingRespons)
+            dialogportenClient.markTransmissionOpened(dialogId, transmissionId, actorId) shouldBe UUID.fromString(MockData.gyldingRespons)
 
             sisteRequestBody() shouldBe
-                """{"type":"TransmissionOpened","transmissionId":"$transmissionId","performedBy":{"actorType":"PartyRepresentative"}}"""
+                """{"type":"TransmissionOpened","transmissionId":"$transmissionId","performedBy":{"actorType":"PartyRepresentative","actorId":"$actorId"}}"""
         }
         test("markTransmissionOpened kaster exception ved feil response") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")
             val dialogId = UUID.randomUUID()
             val transmissionId = UUID.randomUUID()
+            val actorId = "mock_actorId"
 
             shouldThrow<DialogportenClientException> {
-                dialogportenClient.markTransmissionOpened(dialogId, transmissionId)
+                dialogportenClient.markTransmissionOpened(dialogId, transmissionId, actorId)
             }
         }
         test("addApiActions returnerer ingenting ved sukksess") {
