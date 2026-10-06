@@ -30,6 +30,7 @@ data class Transmission(
         @Serializable
         enum class ActorType {
             ServiceOwner,
+            PartyRepresentative
         }
     }
 

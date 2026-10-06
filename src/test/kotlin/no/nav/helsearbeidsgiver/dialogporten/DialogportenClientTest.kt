@@ -69,7 +69,7 @@ class DialogportenClientTest :
             dialogportenClient.markTransmissionOpened(dialogId, transmissionId) shouldBe UUID.fromString(MockData.gyldingRespons)
 
             sisteRequestBody() shouldBe
-                """{"type":"TransmissionOpened","transmissionId":"$transmissionId","performedBy":{"actorType":"ServiceOwner"}}"""
+                """{"type":"TransmissionOpened","transmissionId":"$transmissionId","performedBy":{"actorType":"PartyRepresentative"}}"""
         }
         test("markTransmissionOpened kaster exception ved feil response") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.InternalServerError, "error")

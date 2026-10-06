@@ -135,7 +135,7 @@ class DialogportenClient(
             Activity(
                 type = Activity.ActivityType.TransmissionOpened,
                 transmissionId = transmissionId,
-                performedBy = Transmission.Sender(ActorType.ServiceOwner),
+                performedBy = Transmission.Sender(ActorType.PartyRepresentative),
             ),
         )
 
