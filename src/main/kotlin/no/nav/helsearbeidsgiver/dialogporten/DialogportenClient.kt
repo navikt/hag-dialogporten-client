@@ -129,13 +129,14 @@ class DialogportenClient(
     suspend fun markTransmissionOpened(
         dialogId: UUID,
         transmissionId: UUID,
+        actorId: String,
     ): UUID =
         addActivity(
             dialogId,
             Activity(
                 type = Activity.ActivityType.TransmissionOpened,
                 transmissionId = transmissionId,
-                performedBy = Transmission.Sender(ActorType.ServiceOwner),
+                performedBy = Transmission.Sender(actorType = ActorType.PartyRepresentative, actorId = actorId),
             ),
         )
 
