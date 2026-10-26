@@ -82,6 +82,28 @@ class DialogportenClientTest :
                 dialogportenClient.markTransmissionOpened(dialogId, transmissionId, actorId)
             }
         }
+        test("markTransmissionOpened forsøker på nytt to ganger ved feil") {
+            val (client, requests) =
+                mockDialogportenClientMedResponser(
+                    HttpStatusCode.Conflict to "conflict",
+                    HttpStatusCode.BadRequest to "bad request",
+                    HttpStatusCode.Created to MockData.gyldingRespons,
+                )
+
+            client.markTransmissionOpened(UUID.randomUUID(), UUID.randomUUID(), "actor") shouldBe UUID.fromString(MockData.gyldingRespons)
+
+            requests.size shouldBe 3
+            requests.distinct().size shouldBe 1
+        }
+        test("markTransmissionOpened gir opp etter to retries") {
+            val (client, requests) = mockDialogportenClientMedResponser(HttpStatusCode.Conflict to "conflict")
+
+            shouldThrow<DialogportenClientException> {
+                client.markTransmissionOpened(UUID.randomUUID(), UUID.randomUUID(), "actor")
+            }
+
+            requests.size shouldBe 3
+        }
         test("addApiActions returnerer ingenting ved sukksess") {
             val dialogportenClient = mockDialogportenClient(HttpStatusCode.NoContent)
             val dialogId = UUID.randomUUID()

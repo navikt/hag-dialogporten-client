@@ -2,6 +2,7 @@ package no.nav.helsearbeidsgiver.dialogporten
 
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.retry
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
@@ -148,6 +149,12 @@ class DialogportenClient(
             val response =
                 httpClient
                     .post("$dialogportenUrl/$dialogId/activities") {
+                        retry {
+                            maxRetries = 2
+                            retryIf { _, response -> !response.status.isSuccess() }
+                            retryOnExceptionIf { _, _ -> true }
+                            constantDelay(millis = 200)
+                        }
                         header(HttpHeaders.ContentType, ContentType.Application.Json)
                         header(HttpHeaders.Accept, ContentType.Application.Json)
                         setBody(activity)
