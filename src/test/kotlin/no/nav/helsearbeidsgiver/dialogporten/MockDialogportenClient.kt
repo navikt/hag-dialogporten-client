@@ -20,10 +20,16 @@ fun mockDialogportenClientMedRespons(
     status: HttpStatusCode,
     content: String = "",
 ): Pair<DialogportenClient, () -> String> {
-    var sisteRequestBody = ""
+    val (client, requestBodies) = mockDialogportenClientMedResponser(status to content)
+    return client to { requestBodies.lastOrNull().orEmpty() }
+}
+
+fun mockDialogportenClientMedResponser(vararg responses: Pair<HttpStatusCode, String>): Pair<DialogportenClient, List<String>> {
+    val requestBodies = mutableListOf<String>()
     val mockEngine =
         MockEngine { request ->
-            sisteRequestBody =
+            val (status, content) = responses[minOf(requestBodies.size, responses.lastIndex)]
+            requestBodies +=
                 when (val body = request.body) {
                     is OutgoingContent.ByteArrayContent -> body.bytes().decodeToString()
                     else -> ""
@@ -40,5 +46,5 @@ fun mockDialogportenClientMedRespons(
             every { createHttpClient(any(), any()) } returns mockHttpClient
             DialogportenClient(baseUrl = "url", ressurs = "ressurs", getToken = { "" })
         }
-    return client to { sisteRequestBody }
+    return client to requestBodies
 }
